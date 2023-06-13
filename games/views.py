@@ -6,7 +6,7 @@ from common.json import ModelEncoder
 import json
 
 
-class GamesListEncoder(ModelEncoder):
+class GameEncoder(ModelEncoder):
     model = Game
     properties = [
         "name",
@@ -17,20 +17,27 @@ class GamesListEncoder(ModelEncoder):
         return {"gif": str(o.gif)}
 
 
-
 @require_http_methods(["GET", "POST"])
 def api_list_games(request):
     if request.method == "GET":
         games = Game.objects.all()
         return JsonResponse(
             {"games": games},
-            encoder=GamesListEncoder
+            encoder=GameEncoder
         )
     else:
         content = json.loads(request.body)
         game = Game.objects.create(**content)
         return JsonResponse(
             {"game": game},
-            encoder=GamesListEncoder,
+            encoder=GameEncoder,
             safe=False
         )
+
+
+def api_show_game(request, name):
+    game = Game.objects.filter(name=name)
+    return JsonResponse(
+        {"games": game},
+        encoder=GameEncoder
+    )
