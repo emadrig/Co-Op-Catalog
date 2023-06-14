@@ -65,9 +65,10 @@ def api_list_games_records(request):
     else:
         content = json.loads(request.body)
         game = Game.objects.get(id=content['game'])
+        username = User.get_username(request.user)
         content['game'] = game
-        print(request.user.username, " ______________________________________________")
-        content['player'] = User.objects.get(id=request.user)
+        print(username, " ______________________________________________")
+        content['player'] = User.get(username=username)
         record = GamesRecord.objects.create(**content)
         return JsonResponse(
             {"record": record},

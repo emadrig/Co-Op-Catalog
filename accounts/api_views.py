@@ -1,6 +1,8 @@
 from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login, authenticate
 from django.utils import timezone
 import json
 
@@ -135,3 +137,24 @@ def api_account_detail(request, username):
         response = HttpResponse()
         response.status_code = 204
         return response
+
+@csrf_exempt
+@require_http_methods("POST")
+def user_login(request):
+    content = json.loads(request.body)
+    username = content["username"]
+    password = content["password"]
+    user = authenticate(
+        request,
+        username=username,
+        password=password,
+    )
+    if user is not None:
+        login(request, user)
+        return JsonResponse({
+            "message": "You're logged in!"
+        })
+    else:
+        return JsonResponse({
+            "message": "Can't login"
+        })
