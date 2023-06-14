@@ -2,30 +2,11 @@ from django.shortcuts import render
 from .models import Game, GamesRecord
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
-from common.json import ModelEncoder
 from accounts.models import User
+from .encoders import GameEncoder, GamesRecordEncoder
 import json
 
-class GameEncoder(ModelEncoder):
-    model = Game
-    properties = [
-        "name",
-        "description",
-        "rules"
-    ]
-    def get_extra_data(self, o):
-        return {"gif": str(o.gif)}
 
-class GamesRecordEncoder(ModelEncoder):
-    model = GamesRecord
-    properties = [
-        "score",
-        "game",
-        "player"
-    ]
-    encoders = {
-        "game": GameEncoder
-    }
 
 
 @require_http_methods(["GET", "POST"])
@@ -65,13 +46,29 @@ def api_list_games_records(request):
     else:
         content = json.loads(request.body)
         game = Game.objects.get(id=content['game'])
-        username = User.get_username(request.user)
         content['game'] = game
-        print(username, " ______________________________________________")
-        content['player'] = User.get(username=username)
+        user = User.objects.get(username=request.user.username)
+        content['player'] = user
         record = GamesRecord.objects.create(**content)
         return JsonResponse(
             {"record": record},
             encoder=GamesRecordEncoder,
             safe=False
         )
+
+
+def api_list_game_records_by_game(request, id):
+    records = GamesRecord.objects.filter(game_id=id).order_by("-score")
+    return JsonResponse(
+        {"records": records},
+        encoder=GamesRecordEncoder,
+        safe=False,
+    )
+
+def api_list_game_records_by_player(request, id):
+    records = GamesRecord.objects.filter(player_id=id).order_by("-score")
+    return JsonResponse(
+        {"records": records},
+        encoder=GamesRecordEncoder,
+        safe=False,
+    )

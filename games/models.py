@@ -25,3 +25,6 @@ class GamesRecord(models.Model):
         related_name='games_record',
         on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return str(self.id)

@@ -2,17 +2,17 @@ from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.utils import timezone
 import json
-
 from common.json import ModelEncoder
 from .models import User
+from .guest_generator import make_guest
 
 
 class AccountModelEncoder(ModelEncoder):
     model = User
-    properties = ["email", "first_name", "last_name"]
+    properties = ["email", "first_name", "last_name", "username", "is_guest"]
 
 
 class AccountInfoModelEncoder(ModelEncoder):
@@ -107,11 +107,8 @@ def api_account_detail(request, username):
             response = JsonResponse({"message": "Bad JSON"})
             response.status_code = 400
             return response
-
-        if "email" in content:
-            del content["email"]
-        if "username" in content:
-            del content["username"]
+        if account.is_guest:
+            content['is_guest'] = False
         if account is not None:
             for property in content:
                 if property != "password" and hasattr(account, property):
@@ -123,6 +120,7 @@ def api_account_detail(request, username):
         else:
             status, response_content, account = create_user(request.body)
         if account:
+            print(account.email)
             account.save()
         response = JsonResponse(
             response_content,
@@ -138,8 +136,8 @@ def api_account_detail(request, username):
         response.status_code = 204
         return response
 
-@csrf_exempt
-@require_http_methods("POST")
+# @csrf_exempt
+@require_http_methods(["POST"])
 def user_login(request):
     content = json.loads(request.body)
     username = content["username"]
@@ -157,4 +155,37 @@ def user_login(request):
     else:
         return JsonResponse({
             "message": "Can't login"
+        })
+
+@require_http_methods(["POST"])
+def api_create_guest(request):
+    user_info = make_guest()
+    status_code, response_content, new_user = create_user(json.dumps(user_info))
+    new_user.is_guest = True
+    new_user.save()
+    user = authenticate(
+        request,
+        username=user_info['username'],
+        password=user_info['password'],
+    )
+    if user is not None:
+        login(request, user)
+        return JsonResponse(
+            {"Guest": user},
+            encoder=AccountModelEncoder,
+            safe=False
+            )
+    else:
+        api_create_guest(request)
+
+
+def user_logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return JsonResponse({
+            "message": "You are logged out!"
+        })
+    else:
+        return JsonResponse({
+            "message": "You weren't logged in"
         })
