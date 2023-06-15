@@ -179,8 +179,16 @@ def api_create_guest(request):
         api_create_guest(request)
 
 
+
+
 def user_logout(request):
     if request.user.is_authenticated:
+        if request.user.is_guest:
+            user = User.objects.get(username=request.user.username)
+            del user
+            return JsonResponse({
+                "user": "guest user has been deleted"
+            })
         logout(request)
         return JsonResponse({
             "message": "You are logged out!"
