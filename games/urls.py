@@ -5,6 +5,6 @@ urlpatterns = [
     path("gamerecords/player/<int:id>/", api_list_game_records_by_player, name="api_list_game_records_by_player"),
     path("gamerecords/game/<int:id>/", api_list_game_records_by_game, name="api_list_games_by_game"),
     path("gamerecords/", api_list_games_records, name="api_list_games_records"),
-    path("games/list", api_list_games, name='api_list_games'),
-    path("<str:name>/", api_show_game, name="api_show_game"),
+    path("list/", api_list_games, name='api_list_games'),
+    path("show/<str:name>/", api_show_game, name="api_show_game"),
 ]

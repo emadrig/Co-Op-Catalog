@@ -160,9 +160,8 @@ def user_login(request):
 @require_http_methods(["POST"])
 def api_create_guest(request):
     user_info = make_guest()
-    status_code, response_content, new_user = create_user(json.dumps(user_info))
-    new_user.is_guest = True
-    new_user.save()
+    user = User.objects.create_user(**user_info)
+    user.save()
     user = authenticate(
         request,
         username=user_info['username'],
@@ -170,6 +169,7 @@ def api_create_guest(request):
     )
     if user is not None:
         login(request, user)
+        print("you are logged in", user.username)
         return JsonResponse(
             {"Guest": user},
             encoder=AccountModelEncoder,

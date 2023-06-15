@@ -14,5 +14,6 @@ def make_guest():
         "password": password,
         "email": email,
         "first_name": "guest",
-        "last_name": "guest"
+        "last_name": "guest",
+        "is_guest": True
     }

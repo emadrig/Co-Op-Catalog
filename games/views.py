@@ -1,6 +1,6 @@
-from django.shortcuts import render
 from .models import Game, GamesRecord
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from accounts.models import User
 from .encoders import GameEncoder, GamesRecordEncoder
@@ -8,7 +8,7 @@ import json
 
 
 
-
+@login_required
 @require_http_methods(["GET", "POST"])
 def api_list_games(request):
     if request.method == "GET":
@@ -30,7 +30,7 @@ def api_list_games(request):
 def api_show_game(request, name):
     game = Game.objects.filter(name=name)
     return JsonResponse(
-        {"games": game},
+        {"game": game},
         encoder=GameEncoder
     )
 
