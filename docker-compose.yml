@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  monolith:
-    build: ./monolith
-      # context: ./monolith  # directory containing Dockerfile for Django app
-      # dockerfile: ./Dockerfile.dev
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./co_op_catalog:/usr/src/app  # mount the project directory in the Docker container
-    ports:
-      - 8000:8000  # forward the exposed port to the host machine
-
   ghi:
     image: node:latest
     command: npm start
@@ -23,3 +13,15 @@ services:
       - NODE_ENV=development
     ports:
       - "3000:3000"
+
+  monolith:
+    build: ./monolith
+      # context: ./monolith  # directory containing Dockerfile for Django app
+      # dockerfile: ./Dockerfile.dev
+    environment:
+      DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./co_op_catalog:/usr/src/app  # mount the project directory in the Docker container
+    ports:
+      - 8000:8000  # forward the exposed port to the host machine
