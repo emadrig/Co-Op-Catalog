@@ -2,26 +2,26 @@ version: '3'
 
 services:
   ghi:
-    image: node:latest
-    command: npm start
+    image: node:lts-bullseye
+    command: /app/run.sh
     working_dir: /app
     volumes:
-      - ./ghi/app:/app # mount the project directory in the Docker container
+      - ./ghi/app:/app
     environment:
-      - HOST=0.0.0.0
-      - PORT=3001
-      - NODE_ENV=development
+      HOST: 0.0.0.0
+      PORT: 3000
+      NODE_ENV: development
     ports:
       - "3000:3000"
 
   monolith:
-    build: ./monolith
-      # context: ./monolith  # directory containing Dockerfile for Django app
-      # dockerfile: ./Dockerfile.dev
+    build:
+      context: ./monolith
+      dockerfile: Dockerfile.dev
     environment:
-      DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
+      DJWTO_SIGNING_KEY: abcedef
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./co_op_catalog:/usr/src/app  # mount the project directory in the Docker container
+      - ./monolith:/app
     ports:
-      - 8000:8000  # forward the exposed port to the host machine
+      - 8000:8000

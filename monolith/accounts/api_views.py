@@ -12,12 +12,12 @@ from .guest_generator import make_guest
 
 class AccountModelEncoder(ModelEncoder):
     model = User
-    properties = ["email", "first_name", "last_name", "username", "is_guest"]
+    properties = ["email", "first_name", "last_name", "username", "is_guest", "id"]
 
 
 class AccountInfoModelEncoder(ModelEncoder):
     model = User
-    properties = ["email", "first_name", "last_name", "is_active"]
+    properties = ["email", "first_name", "last_name", "is_active", "id"]
 
     def get_extra_data(self, o):
         return {"updated": timezone.now()}
