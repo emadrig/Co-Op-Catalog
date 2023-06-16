@@ -2,17 +2,24 @@ version: '3'
 
 services:
   monolith:
-    build: ./monolith  # directory containing Dockerfile for Django app
+    build: ./monolith
+      # context: ./monolith  # directory containing Dockerfile for Django app
+      # dockerfile: ./Dockerfile.dev
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./co_op_catalog:/usr/src/app  # mount the project directory in the Docker container
     ports:
       - 8000:8000  # forward the exposed port to the host machine
 
-  # ghi:
-  #   build: ./ghi  # directory containing Dockerfile for React app
-  #   command: npm start
-  #   volumes:
-  #     - ./ghi:/usr/src/app  # mount the project directory in the Docker container
-  #   ports:
-  #     - 3000:3000  # forward the exposed port to the host machine
+  ghi:
+    image: node:latest
+    command: npm start
+    working_dir: /app
+    volumes:
+      - ./ghi/app:/app # mount the project directory in the Docker container
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3001
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"

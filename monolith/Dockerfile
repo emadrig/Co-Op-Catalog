@@ -9,7 +9,7 @@ COPY games games
 COPY co_op_catalog co_op_catalog
 COPY common common
 COPY manage.py manage.py
-COPY requirements.txt ./
+COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
