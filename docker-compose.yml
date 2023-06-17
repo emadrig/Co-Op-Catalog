@@ -1,18 +1,18 @@
 version: '3'
-
 services:
   ghi:
     image: node:lts-bullseye
-    command: /app/run.sh
+    command: ./run.sh
     working_dir: /app
     volumes:
-      - ./ghi/app:/app
-    environment:
-      HOST: 0.0.0.0
-      PORT: 3000
-      NODE_ENV: development
+      - ./ghi:/app
     ports:
       - "3000:3000"
+    environment:
+      HOST_OS: ${OS}
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      CHOKIDAR_USEPOLLING: true
 
   monolith:
     build:
