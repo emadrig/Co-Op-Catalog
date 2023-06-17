@@ -27,7 +27,7 @@ export const apiSlice = createApi({
                 formData.append("password", info.password);
               }
               return {
-                url: "/token",
+                url: "/login",
                 method: "post",
                 body: formData,
                 credentials: "include",
