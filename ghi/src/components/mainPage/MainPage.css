@@ -1,0 +1,27 @@
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 1000px;
+    background-color: #0C0D14;
+}
+
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  .game-square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game-square-img {
+    border-radius: 50px;
+    width: 100%;
+  }

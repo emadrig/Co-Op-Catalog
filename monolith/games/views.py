@@ -1,14 +1,13 @@
 from .models import Game, GamesRecord
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from accounts.models import User
 from .encoders import GameEncoder, GamesRecordEncoder
+import djwto.authentication as auth # type: ignore
 import json
 
 
-
-@login_required
+@auth.jwt_login_required # We can remove login_required later
 @require_http_methods(["GET", "POST"])
 def api_list_games(request):
     if request.method == "GET":
@@ -33,6 +32,7 @@ def api_show_game(request, name):
         {"game": game},
         encoder=GameEncoder
     )
+
 
 @require_http_methods(["GET", "POST"])
 def api_list_games_records(request):
@@ -65,7 +65,8 @@ def api_list_game_records_by_game(request, id):
         safe=False,
     )
 
-def api_list_game_records_by_player(request, id):
+
+def api_list_game_records_by_player(request, id): #stretch goal stuff
     records = GamesRecord.objects.filter(player_id=id).order_by("-score")
     return JsonResponse(
         {"records": records},

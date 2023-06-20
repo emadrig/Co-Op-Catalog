@@ -1,5 +1,6 @@
 import { useLogInMutation } from './store/Api.js'
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 let initialData = {
   username: "",
@@ -7,6 +8,7 @@ let initialData = {
 };
 
 const LoginForm = () => {
+  const navigate = useNavigate()
   const [logIn] = useLogInMutation();
   const [formData, setFormData] = useState(initialData);
 
@@ -22,6 +24,8 @@ const LoginForm = () => {
     const response = await logIn(formData);
     if (response.error) {
       alert("Incorrect Password or Username");
+    } else {
+      navigate('/')
     }
   };
 
@@ -29,7 +33,7 @@ const LoginForm = () => {
     <>
       <div className="ms-auto me-auto shadow p-4 rounded" id="login-form">
         <form onSubmit={handleSubmit}>
-          <h1 className="fw-bold">User Loginadfas</h1>
+          <h1 className="fw-bold">User Login</h1>
           <div className="mb-3">
             <input
               autoFocus
