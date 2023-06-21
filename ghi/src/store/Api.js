@@ -40,9 +40,13 @@ export const apiSlice = createApi({
     getGames: builder.query({
       query: () => ({
         url: 'api/games/list/',
-        credentials: 'include',
       }),
       providesTags: ["Games"]
+    }),
+    getGameDetails: builder.query({
+      query: (name) => ({
+        url: `api/games/show/${name}`
+      })
     }),
     getLeaderBoardByGame: builder.query({
       query: (name) => ({
@@ -56,5 +60,6 @@ export const apiSlice = createApi({
 export const {
   useLogInMutation,
   useGetGamesQuery,
+  useGetGameDetailsQuery,
   useGetLeaderBoardByGameQuery,
 } = apiSlice;

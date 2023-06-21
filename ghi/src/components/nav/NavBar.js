@@ -13,7 +13,7 @@ function Navbar() {
                     <Link to="/leaderboards">Leaderboards</Link>
                 </li>
                 <li>
-                    <Link to='/login'>Login</Link>
+                    <Link to='/login'>Log in</Link>
                 </li>
             </ul>
         </nav>

@@ -29,7 +29,7 @@ def api_list_games(request):
 def api_show_game(request, name):
     game = Game.objects.filter(name=name)
     return JsonResponse(
-        {"game": game},
+        {"game": game[0]},
         encoder=GameEncoder
     )
 
