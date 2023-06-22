@@ -1,9 +1,9 @@
 import { useGetLeaderBoardByGameQuery } from "../../store/Api";
-import { useParams } from "react-router-dom";
 
 
-function Leaderboard() {
-    const { name } = useParams()
-    const { data: game } = useGetLeaderBoardByGameQuery(name)
+function Leaderboard({id}) {
+    const { data: game } = useGetLeaderBoardByGameQuery(id)
     console.log(game)
 }
+
+export default Leaderboard;

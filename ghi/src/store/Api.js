@@ -49,8 +49,8 @@ export const apiSlice = createApi({
       })
     }),
     getLeaderBoardByGame: builder.query({
-      query: (name) => ({
-        url: `/api/games/show/{${name}/`,
+      query: (id) => ({
+        url: `api/games/gamerecords/game/${id}/`,
       }),
       providesTags: ["Leaderboard"]
     })

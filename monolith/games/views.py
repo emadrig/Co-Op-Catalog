@@ -1,75 +1,61 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from .serializers import GameSerializer, GamesRecordSerializer
 from .models import Game, GamesRecord
-from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
-from accounts.models import User
-from .encoders import GameEncoder, GamesRecordEncoder
-import djwto.authentication as auth # type: ignore
-import json
 
 
-@auth.jwt_login_required # We can remove login_required later
-@require_http_methods(["GET", "POST"])
-def api_list_games(request):
-    if request.method == "GET":
+class GameList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
         games = Game.objects.all()
-        return JsonResponse(
-            {"games": games},
-            encoder=GameEncoder
-        )
-    else:
-        content = json.loads(request.body)
-        game = Game.objects.create(**content)
-        return JsonResponse(
-            {"game": game},
-            encoder=GameEncoder,
-            safe=False
-        )
+        serializer = GameSerializer(games, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = GameSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def api_show_game(request, name):
-    game = Game.objects.filter(name=name)
-    return JsonResponse(
-        {"game": game[0]},
-        encoder=GameEncoder
-    )
+class GameDetail(APIView):
+    def get(self, request, name):
+        game = Game.objects.filter(name=name).first()
+        if game:
+            serializer = GameSerializer(game)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-@require_http_methods(["GET", "POST"])
-def api_list_games_records(request):
-    if request.method == "GET":
+class GamesRecordList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
         records = GamesRecord.objects.all()
-        return JsonResponse(
-            {"records": records},
-            encoder=GamesRecordEncoder,
-            safe=False
-        )
-    else:
-        content = json.loads(request.body)
-        game = Game.objects.get(id=content['game'])
-        content['game'] = game
-        user = User.objects.get(username=request.user.username)
-        content['player'] = user
-        record = GamesRecord.objects.create(**content)
-        return JsonResponse(
-            {"record": record},
-            encoder=GamesRecordEncoder,
-            safe=False
-        )
+        serializer = GamesRecordSerializer(records, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = GamesRecordSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(player=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def api_list_game_records_by_game(request, id):
-    records = GamesRecord.objects.filter(game_id=id).order_by("-score")
-    return JsonResponse(
-        {"records": records},
-        encoder=GamesRecordEncoder,
-        safe=False,
-    )
+class GamesRecordByGame(APIView):
+    def get(self, request, id):
+        records = GamesRecord.objects.filter(game_id=id).order_by("-score")
+        serializer = GamesRecordSerializer(records, many=True)
+        return Response(serializer.data)
 
 
-def api_list_game_records_by_player(request, id): #stretch goal stuff
-    records = GamesRecord.objects.filter(player_id=id).order_by("-score")
-    return JsonResponse(
-        {"records": records},
-        encoder=GamesRecordEncoder,
-        safe=False,
-    )
+class GamesRecordByPlayer(APIView):
+    def get(self, request, id):
+        records = GamesRecord.objects.filter(player_id=id).order_by("-score")
+        serializer = GamesRecordSerializer(records, many=True)
+        return Response(serializer.data)

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
 import Modal from "react-modal";
 import { useGetGameDetailsQuery } from "../../store/Api";
+import Leaderboard from "../leaderboards/Leaderboard";
 import './GameDetailModal.css'
 
 
@@ -9,8 +9,6 @@ Modal.setAppElement('#root');
 
 function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
     const { data, isLoading } = useGetGameDetailsQuery(name)
-
-    console.log(data);
 
     return (
         <>
@@ -39,7 +37,9 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                                     <div className="cell" id="description">{ data.game.description }</div>
                                 </div>
                                 <div className="column" id="right-column">
-                                    <div className="cell">Leaderboards</div>
+                                    <div className="cell">
+                                        <Leaderboard id={data.game.id} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
