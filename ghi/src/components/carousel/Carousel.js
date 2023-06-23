@@ -4,11 +4,11 @@ import { useGetGamesQuery } from '../../store/Api'
 
 
 function Carousel() {
-    const { data, isLoading} = useGetGamesQuery()
+    const { data: games, isLoading} = useGetGamesQuery()
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const carouselInfiniteScroll = () => {
-        if (currentIndex === data.games.length - 1) {
+        if (currentIndex === games.length - 1) {
             return setCurrentIndex(0)
         }
         return setCurrentIndex(currentIndex + 1)
@@ -22,7 +22,7 @@ function Carousel() {
 
     return (
         <div className='carousel-container'>
-            {isLoading ? <div>Loading...</div> : data.games.map((game, index) => {
+            {isLoading ? <div>Loading...</div> : games.map((game, index) => {
                 return <h1 className='carousel-item'
                     style={{ transform: `translate(-${currentIndex * 100}%)` }}
                     key={index}>

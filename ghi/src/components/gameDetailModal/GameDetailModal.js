@@ -8,7 +8,7 @@ import './GameDetailModal.css'
 Modal.setAppElement('#root');
 
 function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
-    const { data, isLoading } = useGetGameDetailsQuery(name)
+    const { data: game, isLoading } = useGetGameDetailsQuery(name)
 
     return (
         <>
@@ -23,7 +23,7 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                             <div className="row">
                                 <div className="column" id="left-column">
                                     <div className="cell" id="game-area">
-                                        <img src={require(`../../${data.game.gif}`)} />
+                                        <img src={require(`../../${game.gif}`)} />
                                     </div>
                                     <div className="row" id="game-pictures">
                                         <div className="cell">Picture of game</div>
@@ -34,11 +34,11 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                                         <div className="cell">Play against Friend</div>
                                         <div className="cell">Play against Computer</div>
                                     </div>
-                                    <div className="cell" id="description">{ data.game.description }</div>
+                                    <div className="cell" id="description">{ game.description }</div>
                                 </div>
                                 <div className="column" id="right-column">
                                     <div className="cell">
-                                        <Leaderboard id={data.game.id} />
+                                        <Leaderboard id={game.id} />
                                     </div>
                                 </div>
                             </div>

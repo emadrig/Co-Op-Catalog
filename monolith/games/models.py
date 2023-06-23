@@ -5,7 +5,7 @@ class Game(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     rules = models.TextField()
-    gif = models.ImageField(upload_to="images/")
+    gif = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name

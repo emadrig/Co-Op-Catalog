@@ -5,10 +5,9 @@ import GameDetailModal from "../gameDetailModal/GameDetailModal";
 import './MainPage.css'
 
 function MainPage() {
-    const { data, isLoading } = useGetGamesQuery()
+    const { data: games, isLoading } = useGetGamesQuery()
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [gameName, setGameName] = useState('test')
-
+    const [gameName, setGameName] = useState('Testing')
 
     const activateGameDetailModal = useCallback(
         (name) => () => {
@@ -26,7 +25,7 @@ function MainPage() {
                     <Carousel />
                     <div className="games-grid">
                         {
-                            isLoading ? <div>Loading...</div> : data.games.map(game => (
+                            isLoading ? <div>Loading...</div> : games.map(game => (
                                 <div key={game.id} className="game-square">
                                     <img onClick={activateGameDetailModal(game.name)} className='game-square-img' src={require(`../../${game.gif}`)} />
                                 </div>

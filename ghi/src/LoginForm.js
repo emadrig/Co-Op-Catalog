@@ -1,6 +1,6 @@
 import { useLogInMutation } from './store/Api.js'
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { resolvePath, useNavigate } from 'react-router-dom';
 
 let initialData = {
   username: "",

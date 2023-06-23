@@ -14,7 +14,8 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'description',
             'rules',
-            'id'
+            'id',
+            'gif'
         ]
 
 class GamesRecordSerializer(serializers.HyperlinkedModelSerializer):
