@@ -1,6 +1,9 @@
-import { useLogInMutation } from './store/Api.js'
+import { useGetTokenMutation } from "./store/Api";
 import { useState } from "react";
-import { resolvePath, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';  // import useDispatch
+import { setToken } from './store/tokenSlice'; // import setToken action
+import { useNavigate } from 'react-router-dom';
+
 
 let initialData = {
   username: "",
@@ -8,9 +11,11 @@ let initialData = {
 };
 
 const LoginForm = () => {
-  const navigate = useNavigate()
-  const [logIn] = useLogInMutation();
+  const navigate = useNavigate();
+  const [getToken] = useGetTokenMutation();
+  const dispatch = useDispatch();  // get dispatch
   const [formData, setFormData] = useState(initialData);
+
 
   const handleChange = (e) => {
     setFormData({
@@ -21,11 +26,12 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await logIn(formData);
+    const response = await getToken(formData);
     if (response.error) {
       alert("Incorrect Password or Username");
     } else {
-      navigate('/')
+      dispatch(setToken(response.data.access));
+      navigate('/');
     }
   };
 

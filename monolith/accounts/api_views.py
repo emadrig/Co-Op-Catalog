@@ -139,7 +139,6 @@ def api_account_detail(request, username):
 # @csrf_exempt
 @require_http_methods(["POST"])
 def user_login(request):
-    print(request.body)
     content = json.loads(request.body)
     username = content["username"]
     password = content["password"]

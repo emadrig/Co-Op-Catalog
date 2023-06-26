@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404
 from .models import Game, GamesRecord
 from .serializers import GameSerializer, GamesRecordSerializer
 from accounts.models import User
+import jwt
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 class GameViewSet(viewsets.ModelViewSet):
@@ -39,13 +41,12 @@ class GamesRecordViewSet(viewsets.ModelViewSet):
     authentication_classes = (BasicAuthentication, )
 
     def create(self, request):
+        token = request.headers['cookie'][17::]
+        user_id = AccessToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg3ODIxODE3LCJpYXQiOjE2ODc4MjAwMTcsImp0aSI6IjllOTM2YjZhYzI2NTRmOWE5NGFkZGM1NGIwZDUwNjY5IiwidXNlcl9pZCI6Mn0.A_LEKbzdAzj6SMiQmbjQiDUA0gMcrMdU5w54SisHNy0')['user_id']
         data = request.data.copy()
         game = Game.objects.get(id=data['game'])
         data['game'] = game
-        print(request.user)
-        user = User.objects.get(username=request.user.username)
-        print("this is user", user)
-        data['player'] = user
+        data['player'] = User.objects.get(id=user_id)
         record = GamesRecord.objects.create(**data)
         serializer = self.get_serializer(record)
         return Response({"record": serializer.data})

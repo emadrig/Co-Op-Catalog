@@ -28,4 +28,5 @@ class GamesRecordSerializer(serializers.HyperlinkedModelSerializer):
             'score',
             'player',
             'game',
+            'id'
         ]

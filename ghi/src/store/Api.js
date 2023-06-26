@@ -5,50 +5,28 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000/",
-    // credentials: "include",
+    credentials: "include",
     prepareHeaders: (headers, { getState }) => {
-      const selector = apiSlice.endpoints.getToken.select();
-      const { data: tokenData } = selector(getState());
-      if (tokenData && tokenData.access_token) {
-        headers.set("Authorization", `Bearer ${tokenData.access_token}`);
+      const token = localStorage.getItem('token')
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`)
       }
-      return headers;
+      return headers
     },
   }),
   tagTypes: [],
   endpoints: (builder) => ({
-    getToken: builder.query({
-      query: () => ({
+    getToken: builder.mutation({
+      query: (info) => ({
         url: "/api/token/",
-        credentials: "include",
-        method: 'POST'
+        method: 'POST',
+        body: info
       }),
       providesTags: ["Token"],
     }),
-    logIn: builder.mutation({
-      query: (info) => {
-        let formData = null;
-        if (info instanceof HTMLElement) {
-          formData = new FormData(info);
-        } else {
-          formData = {};
-          formData["username"] = info.username
-          formData["password"] = info.password
-        }
-        return {
-          url: "api/accounts/login/",
-          method: "post",
-          body: formData,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-      },
-      providesTags: ["Account"],
-    }),
     logOut: builder.mutation({
       query: () => ({
-        url: "/token",
+        url: "/api/token/",
         method: "delete",
       }),
       invalidatesTags: ["Account", "Token"],
@@ -64,6 +42,17 @@ export const apiSlice = createApi({
         url: `games/${name}/name/`
       })
     }),
+    createGameRecord: builder.mutation({
+      query: () => ({
+        url: '/gamerecords/',
+        method: "POST",
+        body: {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg3ODIxODE3LCJpYXQiOjE2ODc4MjAwMTcsImp0aSI6IjllOTM2YjZhYzI2NTRmOWE5NGFkZGM1NGIwZDUwNjY5IiwidXNlcl9pZCI6Mn0.A_LEKbzdAzj6SMiQmbjQiDUA0gMcrMdU5w54SisHNy0",
+          "game": 1,
+          "score": 1
+        }
+      })
+    }),
     getLeaderBoardByGame: builder.query({
       query: (id) => ({
         url: `gamerecords/${id}/game/`,
@@ -74,8 +63,8 @@ export const apiSlice = createApi({
 })
 
 export const {
-  useGetTokenQuery,
-  useLogInMutation,
+  useGetTokenMutation,
+  useLogOutMutation,
   useGetGamesQuery,
   useGetGameDetailsQuery,
   useGetLeaderBoardByGameQuery,

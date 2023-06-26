@@ -1,30 +1,34 @@
-import React from "react";
+import LogOutButton from "../logOutButton/LogOutButton";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import './NavBar.css'
-import { useGetTokenQuery } from '../../store/Api';
-
 
 function Navbar() {
-    const { data: token } = useGetTokenQuery();
+    const token = useSelector(state => state.token)
+
     return (
         <nav>
-            {token &&
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/leaderboards">Leaderboards</Link>
-                    </li>
-                </ul>
-            }
-                <ul>
+            <ul>
+                {token ? (
+                    <>
+                        <li>
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li>
+                            <Link to="/leaderboards">Leaderboards</Link>
+                        </li>
+                        <li>
+                            <LogOutButton />
+                        </li>
+                    </>
+                ) : (
                     <li>
                         <Link to='/login'>Log in</Link>
                     </li>
-                </ul>
+                )}
+            </ul>
         </nav>
     )
 }
 
-export default Navbar
+export default Navbar;
