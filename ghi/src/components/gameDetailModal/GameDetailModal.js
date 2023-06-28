@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import { useGetGameDetailsQuery } from "../../store/Api";
 import Leaderboard from "../leaderboards/Leaderboard";
 import './GameDetailModal.css'
+import { Link } from "react-router-dom";
 
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
@@ -31,10 +32,10 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                                         <div className="cell">Picture of game</div>
                                     </div>
                                     <div className="row" id="play-options">
-                                        <div className="cell">Play against Friend</div>
+                                        <Link to={`/play/${game.name}`} className="cell">Play against Friend</Link>
                                         <div className="cell">Play against Computer</div>
                                     </div>
-                                    <div className="cell" id="description">{ game.description }</div>
+                                    <div className="cell" id="description">Description: { game.description }</div>
                                 </div>
                                 <div className="column" id="right-column">
                                     <div className="cell">

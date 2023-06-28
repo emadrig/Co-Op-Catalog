@@ -1,7 +1,7 @@
-import { useGetTokenMutation } from "./store/Api";
+import { useGetTokenMutation } from "../../store/Api";
 import { useState } from "react";
-import { useDispatch } from 'react-redux';  // import useDispatch
-import { setToken } from './store/tokenSlice'; // import setToken action
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../store/tokenSlice';
 import { useNavigate } from 'react-router-dom';
 
 

@@ -3,7 +3,6 @@ import { useGetLeaderBoardByGameQuery } from "../../store/Api";
 
 function Leaderboard({ id }) {
     const { data: game } = useGetLeaderBoardByGameQuery(id)
-    console.log(game);
 
     return (
         <>
@@ -12,14 +11,24 @@ function Leaderboard({ id }) {
             </div>
             <div>
                 {game ?
-                        game.records.map(record => {
-                            return (
-                                <div key={record.id}>
-                                    <p>{record.score}</p>
-                                    <p>{record.player.username}</p>
-                                </div>
-                            )
-                        })
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {game.records.map(record => {
+                                return (
+                                    <tr key={record.id}>
+                                        <td>{record.player.username}</td>
+                                        <td>{record.score}</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
                     :
                     <div>Loading</div>}
             </div>

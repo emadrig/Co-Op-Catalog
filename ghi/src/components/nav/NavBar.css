@@ -2,6 +2,9 @@ nav {
     background-color: #1F2030;
     color: white;
     padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
 }
 
 nav ul {
