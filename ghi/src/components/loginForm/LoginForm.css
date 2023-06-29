@@ -1,0 +1,10 @@
+#login-form {
+    display: flex;
+    background-color: #373952;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    width: 200px;
+    border-radius: 25px;
+}

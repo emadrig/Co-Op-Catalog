@@ -44,6 +44,10 @@
     height: 400px;
 }
 
+#big-game-img {
+  width: 100%;
+}
+
 #game-pictures {
     height: 150px;
 }

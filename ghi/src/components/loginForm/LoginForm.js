@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../store/tokenSlice';
 import { useNavigate } from 'react-router-dom';
+import './LoginForm.css'
 
 
 let initialData = {
@@ -37,9 +38,9 @@ const LoginForm = () => {
 
   return (
     <>
-      <div className="ms-auto me-auto shadow p-4 rounded" id="login-form">
+      <div className="" id="login-form">
         <form onSubmit={handleSubmit}>
-          <h1 className="fw-bold">User Login</h1>
+          <h1 className="">User Login</h1>
           <div className="mb-3">
             <input
               autoFocus
@@ -49,10 +50,10 @@ const LoginForm = () => {
               required
               type="text"
               name="username"
-              className="form-control fs-2 border border-3 border-dark"
+              className=""
             />
           </div>
-          <div className="mb-3">
+          <div className="">
             <input
               onChange={handleChange}
               value={formData.password}
@@ -61,19 +62,19 @@ const LoginForm = () => {
               type="password"
               name="password"
               autoComplete="on"
-              className="form-control fs-2 border border-3 border-dark"
+              className=""
             />
           </div>
-          <div className="mb-3">
+          <div className="">
             <button
-              className="btn fw-bold fs-2 border border-dark border-3 rounded"
+              className=""
               id="login-button"
             >
               Login
             </button>
           </div>
           <div>
-            <p className="fs-2">
+            <p className="">
               Don't have an account?
             </p>
           </div>

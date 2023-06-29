@@ -24,7 +24,7 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                             <div className="row">
                                 <div className="column" id="left-column">
                                     <div className="cell" id="game-area">
-                                        <img src={require(`../../${game.gif}`)} />
+                                        <img src={require(`../../${game.gif}`)} id="big-game-img" />
                                     </div>
                                     <div className="row" id="game-pictures">
                                         <div className="cell">Picture of game</div>
