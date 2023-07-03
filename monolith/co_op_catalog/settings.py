@@ -32,6 +32,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "channels",
+    "daphne",
+    "rest_framework",
+    "corsheaders",
+    "chat.apps.ChatConfig",
     "accounts.apps.AccountsConfig",
     "games.apps.GamesConfig",
     "django.contrib.admin",
@@ -40,8 +45,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "corsheaders",
-    "rest_framework"
 ]
 
 MIDDLEWARE = [
@@ -84,6 +87,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "co_op_catalog.wsgi.application"
+ASGI_APPLICATION = "co_op_catalog.routing.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND' : 'channels.layers.InMemoryChannelLayer' #InMemoryChannelLayer is for dev only and should not be used in prodcution.
+    }
+}
 
 
 # Database

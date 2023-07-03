@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useGetGameDetailsQuery } from "../../store/Api";
 import { useState } from "react";
 import './PlayGamePage.css'
+import Chat from "../chat/chat";
 
 
 
@@ -14,11 +15,14 @@ function PlayGamePage() {
         )
     } else {
         return (
-            <div className="play-games-page">
-                <div>{game.name}</div>
-                <div>{game.description}</div>
-                <div>{game.rules}</div>
-            </div>
+            <>
+                <div className="play-games-page">
+                    <div>{game.name}</div>
+                    <div>{game.description}</div>
+                    <div>{game.rules}</div>
+                </div>
+                <Chat />
+            </>
         )
     }
 }
