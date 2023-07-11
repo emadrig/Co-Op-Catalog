@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
-from .models import Game, GamesRecord
-from .serializers import GameSerializer, GamesRecordSerializer
+from .models import Game, GamesRecord, TicTacToeMatch
+from .serializers import GameSerializer, GamesRecordSerializer, TicTacToeMatchSerializer
 from accounts.models import User
 import jwt
 from rest_framework_simplejwt.tokens import AccessToken
@@ -62,3 +62,20 @@ class GamesRecordViewSet(viewsets.ModelViewSet):
         records = GamesRecord.objects.filter(player_id=pk).order_by("-score")
         serializer = self.get_serializer(records, many=True)
         return Response({"records": serializer.data})
+
+
+class TicTacToeMatchViewSet(viewsets.ModelViewSet):
+    queryset = TicTacToeMatch.objects.all()
+    serializer_class = TicTacToeMatchSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request):
+        match = TicTacToeMatch.objects.create(state='nnnnnnnnn0')
+        serializer = self.get_serializer(match)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], url_path='match', url_name='match_id')
+    def get_by_id(self, request, pk=None):
+        match = get_object_or_404(TicTacToeMatch, id=pk)
+        serializer = self.get_serializer(match)
+        return Response(serializer.data)

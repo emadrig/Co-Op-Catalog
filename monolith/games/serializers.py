@@ -1,5 +1,5 @@
 from accounts.models import User
-from .models import Game, GamesRecord
+from .models import Game, GamesRecord, TicTacToeMatch
 from rest_framework import serializers
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -28,5 +28,13 @@ class GamesRecordSerializer(serializers.HyperlinkedModelSerializer):
             'score',
             'player',
             'game',
+            'id'
+        ]
+
+class TicTacToeMatchSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TicTacToeMatch
+        fields = [
+            'state',
             'id'
         ]

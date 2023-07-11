@@ -16,6 +16,7 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path='/' element={<MainPage />} />
           <Route path='/play/:gameName/' element={<PlayGamePage />} />
+          <Route path='/play/:gameName/:id/' element={<PlayGamePage />} />
         </Routes>
       </BrowserRouter>
     </>

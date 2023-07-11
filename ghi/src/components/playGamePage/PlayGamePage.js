@@ -3,6 +3,7 @@ import { useGetGameDetailsQuery } from "../../store/Api";
 import { useState } from "react";
 import './PlayGamePage.css'
 import Chat from "../chat/chat";
+import TicTacToe from "../ticTacToe/TicTacToe";
 
 
 
@@ -17,9 +18,10 @@ function PlayGamePage() {
         return (
             <>
                 <div className="play-games-page">
-                    <div>{game.name}</div>
+                    <TicTacToe />
+                    {/* <div>{game.name}</div>
                     <div>{game.description}</div>
-                    <div>{game.rules}</div>
+                    <div>{game.rules}</div> */}
                 </div>
                 <Chat />
             </>

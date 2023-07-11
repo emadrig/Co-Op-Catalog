@@ -13,7 +13,7 @@ const Chat = () => {
     useEffect(() => {
         client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/' + room + '/');
         client.current.onopen = () => {
-            console.log("WebSocket Client Connected");
+            console.log("WebSocket Client Connected for Chat");
         };
         client.current.onmessage = (message) => {
             const dataFromServer = JSON.parse(message.data);

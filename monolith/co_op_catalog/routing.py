@@ -1,12 +1,14 @@
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 from chat.consumers import TextRoomConsumer
+from games.consumers import TTTMatchConsumer
 from django.urls import re_path
 
 
 django_asgi_app = get_asgi_application()
 websocket_urlpatterns = [
     re_path(r'^ws/(?P<room_name>[^/]+)/$', TextRoomConsumer.as_asgi()),
+    re_path(r'^ws/tic_tac_toe/(?P<match>[^/]+)/$', TTTMatchConsumer.as_asgi()),
 ]
 
 

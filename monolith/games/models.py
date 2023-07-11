@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from random_words import RandomWords, RandomEmails
+
 
 class Game(models.Model):
     name = models.CharField(max_length=50)
@@ -28,3 +30,6 @@ class GamesRecord(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class TicTacToeMatch(models.Model):
+    state = models.CharField(max_length=10, default="nnnnnnnnn0")
