@@ -5,6 +5,7 @@ Automat==22.10.0
 certifi==2023.5.7
 cffi==1.15.1
 channels==4.0.0
+channels-redis==4.1.0
 charset-normalizer==3.1.0
 constantly==15.1.0
 cryptography==41.0.1
@@ -21,6 +22,7 @@ hyperlink==21.0.0
 idna==3.4
 incremental==22.10.0
 Markdown==3.4.3
+msgpack==1.0.5
 Pillow==9.5.0
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
@@ -29,6 +31,7 @@ PyJWT==2.7.0
 pyOpenSSL==23.2.0
 pytz==2023.3
 RandomWords==0.4.0
+redis==4.6.0
 requests==2.31.0
 service-identity==23.1.0
 six==1.16.0

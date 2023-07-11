@@ -7,9 +7,11 @@ const TicTacToe = () => {
     const [playerCount, setPlayerCount] = useState(1)
     const [match, setMatch] = useState(null)
     const { id } = useParams()
+    const playerID = id ? 1 : 0
     const [gameURL, setGameURL] = useState()
     const client = useRef(null);
     const [linkCopied, setLinkCopied] = useState(false);
+
 
     useEffect(() => {
         if (id == undefined) {
@@ -49,18 +51,30 @@ const TicTacToe = () => {
     }, [match]);
 
     const onButtonClicked = (index) => {
-        client.current.send(
-            JSON.stringify({
-                type: "message",
-                index: index,
-            })
-        );
+        if (playerID.toString() === gameState.state[9]) {
+            client.current.send(
+                JSON.stringify({
+                    type: "message",
+                    index: index,
+                })
+            );
+        } else {
+            console.log("It's not your turn.");
+        }
     };
+
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(gameURL)
             .then(() => {
                 setLinkCopied(true);
+                // Send a message to the server indicating the clipboard operation was successful
+                client.current.send(
+                    JSON.stringify({
+                        type: "clipboard_success",
+                        index: null
+                    })
+                );
             })
             .catch((err) => {
                 console.error('Async: Could not copy text: ', err);
@@ -68,6 +82,22 @@ const TicTacToe = () => {
     };
 
     console.log(playerCount);
+    console.log(gameState);
+
+const renderRow = (start) => (
+        <tr>
+            {Array(3).fill().map((_, i) => (
+                <td key={start + i}>
+                    <button
+                        disabled={gameState.state[start + i] !== "n" || playerID.toString() !== gameState.state[9] || gameState.state[10] === "W"}
+                        onClick={() => onButtonClicked(start + i)}
+                    >
+                        {gameState.state[start + i]}
+                    </button>
+                </td>
+            ))}
+        </tr>
+    );
 
     return (
         <>
@@ -76,43 +106,17 @@ const TicTacToe = () => {
                     {linkCopied ? "Link copied to clipboard" : "Invite your friend"}
                 </button>
                 : (
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(0) }}>{gameState.state[0]}</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(1) }}>{gameState.state[1]}</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(2) }}>{gameState.state[2]}</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(3) }}>{gameState.state[3]}</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(4) }}>{gameState.state[4]}</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(5) }}>{gameState.state[5]}</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(6) }}>{gameState.state[6]}</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(7) }}>{gameState.state[7]}</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => { onButtonClicked(8) }}>{gameState.state[8]}</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <>
+                        {gameState.state[10] === "W" &&
+                            <h1>{playerID.toString() === gameState.state[9] ? "You won" : "You lost"}</h1>}
+                        <table>
+                            <tbody>
+                                {renderRow(0)}
+                                {renderRow(3)}
+                                {renderRow(6)}
+                            </tbody>
+                        </table>
+                    </>
                 )}
         </>
     );
