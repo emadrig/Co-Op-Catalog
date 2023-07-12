@@ -2,12 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import './chat.css'
 
-const Chat = () => {
-    const [filledForm, setFilledForm] = useState(false);
+const Chat = ({ room, id }) => {
     const [messages, setMessages] = useState([]);
     const [value, setValue] = useState('');
-    const [name, setName] = useState('');
-    const [room, setRoom] = useState('test');
+    const player = id ? 2 : 1
     const client = useRef(null);
 
     useEffect(() => {
@@ -22,13 +20,11 @@ const Chat = () => {
                     ...prevMessages,
                     {
                         msg: dataFromServer.text,
-                        name: dataFromServer.sender,
+                        player: dataFromServer.sender,
                     },
                 ]);
             }
         };
-
-        // Clean up the connection when the component is unmounted
         return () => {
             client.current.close();
         };
@@ -36,58 +32,50 @@ const Chat = () => {
 
     const onButtonClicked = (e) => {
         e.preventDefault();
+        console.log(e.value);
         client.current.send(
             JSON.stringify({
                 type: "message",
                 text: value,
-                sender: name,
+                sender: player,
             })
         );
         setValue("");
     };
 
     return (
-        <div className='chat-component'>
-            {filledForm ? (
-                <div style={{ marginTop: 50 }}>
-                    Room Name: {room}
-                    <div style={{height: 500, maxHeight: 500, overflow: "auto"}}>
-                        {messages.map((message, index) => (
-                            <div key={index}>
-                                <h3>{message.name}</h3>
-                                <p>{message.msg}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <form onSubmit={onButtonClicked}>
-                        <input
-                            type="text"
-                            value={value}
-                            onChange={(e) => setValue(e.target.value)}
-                        />
-                        <button type="submit">Send Message</button>
-                    </form>
-                </div>
-            ) : (
+        <>
+            <h1>You are player: {player}</h1>
+            <div className='chat-component'>
                 <div>
-                    <form onSubmit={(e) => { e.preventDefault(); setFilledForm(true) }}>
-                        <input
-                            type="text"
-                            placeholder="Room name"
-                            value={room}
-                            onChange={(e) => setRoom(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Sender"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <button type="submit">Submit</button>
-                    </form>
+                    <div id='message-area'>
+                        Room Name: {room}
+                        <table>
+                            <tbody>
+                                {messages.map((message, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            Player {message.player}:
+                                        </td>
+                                        <td>
+                                            {message.msg}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            )}
-        </div>
+            </div>
+            <form onSubmit={onButtonClicked} id='form'>
+                <input
+                    type="text"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                />
+                <button type="submit">Send Message</button>
+            </form>
+        </>
     );
 };
 

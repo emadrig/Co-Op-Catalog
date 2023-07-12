@@ -1,5 +1,4 @@
 .play-games-page {
-    display: flex;
     margin-right: auto;
     margin-left: auto;
     margin-top: 5%;
@@ -10,3 +9,13 @@
     color: white;
     max-width: 1000px;
 }
+
+#game-area {
+    width: 100%;
+    height: 50vh;
+    background-color: black;
+    border-radius: 50px;
+}
+
+
+/* imma take a break */

@@ -1,34 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import './TicTacToe.css'
 
-const TicTacToe = () => {
+
+const TicTacToe = ({ id, match, gameURL }) => {
     const [gameState, setGameState] = useState({ "state": "nnnnnnnnn0" });
     const [playerCount, setPlayerCount] = useState(1)
-    const [match, setMatch] = useState(null)
-    const { id } = useParams()
     const playerID = id ? 1 : 0
-    const [gameURL, setGameURL] = useState()
     const client = useRef(null);
     const [linkCopied, setLinkCopied] = useState(false);
 
 
     useEffect(() => {
-        if (id == undefined) {
-            fetch('http://localhost:8000/tictactoe-match/', { method: "POST" })
-                .then(res => res.json())
-                .then(data => {
-                    setMatch(data['id'])
-                    setGameURL(`http://localhost:3000/play/Tic%20Tac%20Toe/${data['id']}`)
-                })
-        }
-    }, [])
-
-
-    useEffect(() => {
-        if (id) {
-            setMatch(id)
-        }
         if (match) {
             client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/tic_tac_toe/' + match + '/');
             client.current.onopen = () => {
@@ -49,6 +32,7 @@ const TicTacToe = () => {
             };
         }
     }, [match]);
+
 
     const onButtonClicked = (index) => {
         if (playerID.toString() === gameState.state[9]) {
@@ -81,10 +65,8 @@ const TicTacToe = () => {
             });
     };
 
-    console.log(playerCount);
-    console.log(gameState);
 
-const renderRow = (start) => (
+    const renderRow = (start) => (
         <tr>
             {Array(3).fill().map((_, i) => (
                 <td key={start + i}>
@@ -100,10 +82,10 @@ const renderRow = (start) => (
     );
 
     return (
-        <>
+        <div id='game'>
             {playerCount < 2 ?
                 <button onClick={copyToClipboard}>
-                    {linkCopied ? "Link copied to clipboard" : "Invite your friend"}
+                    {linkCopied ? "Link copied to clipboard. Waiting for friend to join." : "Invite your friend"}
                 </button>
                 : (
                     <>
@@ -118,7 +100,7 @@ const renderRow = (start) => (
                         </table>
                     </>
                 )}
-        </>
+        </div>
     );
 };
 

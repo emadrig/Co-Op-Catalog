@@ -24,7 +24,6 @@ class TTTMatchConsumer(WebsocketConsumer):
         else: return False
 
 
-
     def connect(self):
         self.match_id = self.scope['url_route']['kwargs']['match']
         self.match_group_id = 'match_%s' % self.match_id
@@ -38,7 +37,6 @@ class TTTMatchConsumer(WebsocketConsumer):
         count_of_connected_users = cache.get(self.match_id, 0)
         # increment the count of connected users
         cache.set(self.match_id, count_of_connected_users + 1)
-
         async_to_sync(self.channel_layer.group_send)(
             self.match_group_id,
             {
@@ -46,7 +44,6 @@ class TTTMatchConsumer(WebsocketConsumer):
                 'state': 'nnnnnnnnn0'
             }
         )
-
 
         self.accept()
 
@@ -56,6 +53,7 @@ class TTTMatchConsumer(WebsocketConsumer):
             self.match_group_id,
             self.channel_name
         )
+
         # decrease the count of connected users
         count_of_connected_users = cache.get(self.match_id, 0) - 1
         cache.set(self.match_id, count_of_connected_users)
@@ -72,7 +70,6 @@ class TTTMatchConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         count_of_connected_users = cache.get(self.match_id, 0)
-        print(count_of_connected_users, "COUNT----------------")
         # Receive message from WebSocket
         text_data_json = json.loads(text_data)
         self.match = TicTacToeMatch.objects.get(id=self.match_id)
@@ -82,7 +79,6 @@ class TTTMatchConsumer(WebsocketConsumer):
         if text_data_json['index'] != None:
             idx = text_data_json['index']
             state[idx] = letter
-
             winner = self.check_for_winner(state)
             print(winner)
             if winner:
