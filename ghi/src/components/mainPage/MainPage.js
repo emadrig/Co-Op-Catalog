@@ -10,8 +10,6 @@ function MainPage() {
     const { data: games, isLoading } = useGetGamesQuery()
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [gameName, setGameName] = useState('Testing')
-    const user = useSelector(state => state.user.value);
-    console.log("This is user", user);
 
     const activateGameDetailModal = useCallback(
         (name) => () => {

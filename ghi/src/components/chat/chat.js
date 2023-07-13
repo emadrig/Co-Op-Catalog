@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { useSelector } from 'react-redux';
 import './chat.css'
 
 const Chat = ({ room, id }) => {
@@ -7,6 +8,7 @@ const Chat = ({ room, id }) => {
     const [value, setValue] = useState('');
     const player = id ? 2 : 1
     const client = useRef(null);
+    const user = useSelector(state => state.user.value);
 
     useEffect(() => {
         client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/' + room + '/');
@@ -37,7 +39,7 @@ const Chat = ({ room, id }) => {
             JSON.stringify({
                 type: "message",
                 text: value,
-                sender: player,
+                sender: user.first_name,
             })
         );
         setValue("");
@@ -55,7 +57,7 @@ const Chat = ({ room, id }) => {
                                 {messages.map((message, index) => (
                                     <tr key={index}>
                                         <td>
-                                            Player {message.player}:
+                                            {message.player}:
                                         </td>
                                         <td>
                                             {message.msg}
