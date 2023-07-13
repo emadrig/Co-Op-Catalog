@@ -82,13 +82,13 @@ def api_list_accounts(request):
 
 
 @require_http_methods(["GET", "PUT", "DELETE"])
-def api_account_detail(request, username):
+def api_account_detail(request, id):
     try:
-        account = User.objects.filter(is_active=True).get(username=username)
+        account = User.objects.filter(is_active=True).get(id=id)
     except User.DoesNotExist:
-        print("User.DoesNotExist", username)
+        print("User.DoesNotExist", id)
         if request.method == "GET":
-            response = JsonResponse({"message": username})
+            response = JsonResponse({"message": id})
             response.status_code = 404
             return response
         else:

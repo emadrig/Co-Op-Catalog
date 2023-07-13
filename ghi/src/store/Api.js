@@ -24,6 +24,11 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Token"],
     }),
+    getUser: builder.query({
+      query: (id) => ({
+        url: `/api/accounts/${id}/`
+      }),
+    }),
     logOut: builder.mutation({
       query: () => ({
         url: "/api/token/",
@@ -43,14 +48,10 @@ export const apiSlice = createApi({
       })
     }),
     createGameRecord: builder.mutation({
-      query: () => ({
+      query: (body) => ({
         url: '/gamerecords/',
         method: "POST",
-        body: {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg3ODIxODE3LCJpYXQiOjE2ODc4MjAwMTcsImp0aSI6IjllOTM2YjZhYzI2NTRmOWE5NGFkZGM1NGIwZDUwNjY5IiwidXNlcl9pZCI6Mn0.A_LEKbzdAzj6SMiQmbjQiDUA0gMcrMdU5w54SisHNy0",
-          "game": 1,
-          "score": 1
-        }
+        body: body
       })
     }),
     getLeaderBoardByGame: builder.query({
@@ -68,4 +69,5 @@ export const {
   useGetGamesQuery,
   useGetGameDetailsQuery,
   useGetLeaderBoardByGameQuery,
+  useCreateGameRecordMutation,
 } = apiSlice;

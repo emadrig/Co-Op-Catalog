@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import './PlayGamePage.css'
 import Chat from "../chat/chat";
 import TicTacToe from "../ticTacToe/TicTacToe";
-
+import jwt_decode from "jwt-decode"
+import { useSelector } from 'react-redux';
 
 
 function PlayGamePage() {
@@ -13,6 +14,9 @@ function PlayGamePage() {
     const [gameURL, setGameURL] = useState()
     const [match, setMatch] = useState(null)
     const [props, setProps] = useState({ "id": id })
+    const token = useSelector(state => state.token)
+    const user = jwt_decode(token).user_id
+
 
     useEffect(() => {
         if (id === undefined) {
@@ -48,8 +52,8 @@ function PlayGamePage() {
             <>
                 <div className="play-games-page">
                     <h1>{game.name}</h1>
-                    <div id="game-area">
-                        <TicTacToe id={props.id} match={props.match} gameURL={props.gameURL} />
+                    <div id="play-game-area">
+                        <TicTacToe id={props.id} match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
                     </div>
                     <div>{game.description}</div>
                     <div>{game.rules}</div>

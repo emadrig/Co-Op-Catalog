@@ -7,5 +7,5 @@ urlpatterns = [
     path("create-guest/", api_create_guest, name="api_create_guest"),
     path("login/", user_login, name="user_login" ),
     path("logout/", user_logout, name="logout"),
-    path("<str:username>/", api_account_detail,name="api_account_detail"),
+    path("<int:id>/", api_account_detail,name="api_account_detail"),
 ]

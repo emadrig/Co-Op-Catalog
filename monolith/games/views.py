@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from .models import Game, GamesRecord, TicTacToeMatch
-from .serializers import GameSerializer, GamesRecordSerializer, TicTacToeMatchSerializer
+from .serializers import GameDetailSerializer, GameListSerializer, GamesRecordSerializer, TicTacToeMatchSerializer
 from accounts.models import User
 import jwt
 from rest_framework_simplejwt.tokens import AccessToken
@@ -13,7 +13,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 class GameViewSet(viewsets.ModelViewSet):
     queryset = Game.objects.all()
-    serializer_class = GameSerializer
+    serializer_class = GameListSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_permissions(self):
@@ -24,13 +24,13 @@ class GameViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
         game = Game.objects.create(**data)
-        serializer = self.get_serializer(game)
+        serializer = GameDetailSerializer(game)
         return Response(serializer.data)
 
     @action(detail=True, methods=['get'], url_path='name', url_name='game_name')
     def get_by_name(self, request, pk=None):
         game = get_object_or_404(Game, name=pk)
-        serializer = self.get_serializer(game)
+        serializer = GameDetailSerializer(game)
         return Response(serializer.data)
 
 
@@ -41,12 +41,12 @@ class GamesRecordViewSet(viewsets.ModelViewSet):
     authentication_classes = (BasicAuthentication, )
 
     def create(self, request):
-        token = request.headers['cookie'][17::]
-        user_id = AccessToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg3ODIxODE3LCJpYXQiOjE2ODc4MjAwMTcsImp0aSI6IjllOTM2YjZhYzI2NTRmOWE5NGFkZGM1NGIwZDUwNjY5IiwidXNlcl9pZCI6Mn0.A_LEKbzdAzj6SMiQmbjQiDUA0gMcrMdU5w54SisHNy0')['user_id']
         data = request.data.copy()
         game = Game.objects.get(id=data['game'])
         data['game'] = game
-        data['player'] = User.objects.get(id=user_id)
+        user = User.objects.get(id=data['user'])
+        data['player'] = user
+        del data['user']
         record = GamesRecord.objects.create(**data)
         serializer = self.get_serializer(record)
         return Response({"record": serializer.data})

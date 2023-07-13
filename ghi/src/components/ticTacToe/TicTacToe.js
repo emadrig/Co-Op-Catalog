@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { useCreateGameRecordMutation } from '../../store/Api';
 import './TicTacToe.css'
 
 
-const TicTacToe = ({ id, match, gameURL }) => {
+const TicTacToe = ({ id, match, gameURL, game, user }) => {
     const [gameState, setGameState] = useState({ "state": "nnnnnnnnn0" });
     const [playerCount, setPlayerCount] = useState(1)
     const playerID = id ? 1 : 0
     const client = useRef(null);
     const [linkCopied, setLinkCopied] = useState(false);
+    const [win, setWin] = useState(false)
+    const [createGameRecord] = useCreateGameRecordMutation()
+    const [recordCreated, setRecordCreated] = useState(false);
 
 
     useEffect(() => {
@@ -24,6 +28,7 @@ const TicTacToe = ({ id, match, gameURL }) => {
                         state: dataFromServer.state,
                     });
                     setPlayerCount(dataFromServer.count_of_connected_users)
+                    setWin(dataFromServer.state[10] === "W")
                 }
             };
             // Clean up the connection when the component is unmounted
@@ -32,6 +37,19 @@ const TicTacToe = ({ id, match, gameURL }) => {
             };
         }
     }, [match]);
+
+
+    useEffect(() => {
+        if (win && !recordCreated && playerID.toString() === gameState.state[9]) {
+            createGameRecord({
+                score: 1,
+                game: game,
+                user: user,
+            });
+            setRecordCreated(true);
+    }})
+
+
 
 
     const onButtonClicked = (index) => {
@@ -71,7 +89,7 @@ const TicTacToe = ({ id, match, gameURL }) => {
             {Array(3).fill().map((_, i) => (
                 <td key={start + i}>
                     <button
-                        disabled={gameState.state[start + i] !== "n" || playerID.toString() !== gameState.state[9] || gameState.state[10] === "W"}
+                        disabled={gameState.state[start + i] !== "n" || playerID.toString() !== gameState.state[9] || win}
                         onClick={() => onButtonClicked(start + i)}
                     >
                         {gameState.state[start + i]}
@@ -89,7 +107,7 @@ const TicTacToe = ({ id, match, gameURL }) => {
                 </button>
                 : (
                     <>
-                        {gameState.state[10] === "W" &&
+                        {win &&
                             <h1>{playerID.toString() === gameState.state[9] ? "You won" : "You lost"}</h1>}
                         <table>
                             <tbody>

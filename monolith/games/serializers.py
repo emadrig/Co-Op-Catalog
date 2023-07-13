@@ -7,7 +7,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['username']
 
-class GameSerializer(serializers.HyperlinkedModelSerializer):
+class GameDetailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Game
         fields = [
@@ -18,9 +18,18 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
             'gif'
         ]
 
+class GameListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Game
+        fields = [
+            'name',
+            'id',
+            'gif'
+        ]
+
 class GamesRecordSerializer(serializers.HyperlinkedModelSerializer):
     player = UserSerializer()
-    game = GameSerializer()
+    game = GameListSerializer()
 
     class Meta:
         model = GamesRecord
