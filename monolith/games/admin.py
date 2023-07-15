@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Game, GamesRecord, TicTacToeMatch
+from .models import Game, PlayerHighScore, TicTacToeMatch
 
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(GamesRecord)
-class GamesRecord(admin.ModelAdmin):
+@admin.register(PlayerHighScore)
+class PlayerHighScore(admin.ModelAdmin):
     pass
 
 @admin.register(TicTacToeMatch)

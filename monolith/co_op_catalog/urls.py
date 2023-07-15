@@ -11,7 +11,7 @@ from rest_framework_simplejwt.views import (
 
 router = routers.DefaultRouter()
 router.register(r'games', views.GameViewSet, basename='game')
-router.register(r'gamerecords', views.GamesRecordViewSet, basename='gamerecords')
+router.register(r'high-score', views.PlayerHighScoreViewSet, basename='high-score')
 router.register(r'tictactoe-match', views.TicTacToeMatchViewSet, basename='match')
 
 urlpatterns = [

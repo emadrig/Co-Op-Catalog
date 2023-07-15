@@ -4,11 +4,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
-from .models import Game, GamesRecord, TicTacToeMatch
-from .serializers import GameDetailSerializer, GameListSerializer, GamesRecordSerializer, TicTacToeMatchSerializer
+from .models import Game, PlayerHighScore, TicTacToeMatch
+from .serializers import GameDetailSerializer, GameListSerializer, PlayerHighScoreSerializer, TicTacToeMatchSerializer
 from accounts.models import User
-import jwt
-from rest_framework_simplejwt.tokens import AccessToken
 
 
 class GameViewSet(viewsets.ModelViewSet):
@@ -34,9 +32,9 @@ class GameViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class GamesRecordViewSet(viewsets.ModelViewSet):
-    queryset = GamesRecord.objects.all()
-    serializer_class = GamesRecordSerializer
+class PlayerHighScoreViewSet(viewsets.ModelViewSet):
+    queryset = PlayerHighScore.objects.all()
+    serializer_class = PlayerHighScoreSerializer
     permission_classes = [permissions.AllowAny]
     authentication_classes = (BasicAuthentication, )
 
@@ -47,21 +45,31 @@ class GamesRecordViewSet(viewsets.ModelViewSet):
         user = User.objects.get(id=data['user'])
         data['player'] = user
         del data['user']
-        record = GamesRecord.objects.create(**data)
-        serializer = self.get_serializer(record)
-        return Response({"record": serializer.data})
+        high_score = PlayerHighScore.objects.filter(player=user.id, game=game.id)
 
-    @action(detail=True, methods=['get'], url_path='game', url_name='gamerecords_name' )
+        if high_score.exists() and high_score[0].game.multiplayer:
+            high_score = high_score[0]
+            high_score.score += 1
+            high_score.save()
+            serializer = self.get_serializer(high_score)
+            return Response(serializer.data)
+        else:
+            high_score = PlayerHighScore.objects.create(**data)
+            serializer = self.get_serializer(high_score)
+            return Response(serializer.data)
+
+
+    @action(detail=True, methods=['get'], url_path='game', url_name='high-score_name' )
     def list_by_game(self, request, pk=None):
-        records = GamesRecord.objects.filter(game_id=pk).order_by("-score")
-        serializer = self.get_serializer(records, many=True)
-        return Response({"records": serializer.data})
+        high_scores = PlayerHighScore.objects.filter(game_id=pk).order_by("-score")
+        serializer = self.get_serializer(high_scores, many=True)
+        return Response({"high_scores": serializer.data})
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['get'], url_path='player', url_name='high-score_name' )
     def list_by_player(self, request, pk=None):
-        records = GamesRecord.objects.filter(player_id=pk).order_by("-score")
-        serializer = self.get_serializer(records, many=True)
-        return Response({"records": serializer.data})
+        high_scores = PlayerHighScore.objects.filter(player_id=pk).order_by("-score")
+        serializer = self.get_serializer(high_scores, many=True)
+        return Response({"high_scores": serializer.data})
 
 
 class TicTacToeMatchViewSet(viewsets.ModelViewSet):

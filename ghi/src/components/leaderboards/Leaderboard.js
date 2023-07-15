@@ -19,11 +19,11 @@ function Leaderboard({ id }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {game.records.map(record => {
+                            {game.high_scores.map(highScore => {
                                 return (
-                                    <tr key={record.id}>
-                                        <td>{record.player.username}</td>
-                                        <td>{record.score}</td>
+                                    <tr key={highScore.id}>
+                                        <td>{highScore.player.username}</td>
+                                        <td>{highScore.score}</td>
                                     </tr>
                                 )
                             })}

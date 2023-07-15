@@ -2,14 +2,12 @@ import { useCallback, useState } from "react";
 import Carousel from "../carousel/Carousel";
 import { useGetGamesQuery } from "../../store/Api";
 import GameDetailModal from "../gameDetailModal/GameDetailModal";
-import { useSelector } from "react-redux";
 import './MainPage.css'
-import { selectUser } from "../../store/userSlice";
 
 function MainPage() {
     const { data: games, isLoading } = useGetGamesQuery()
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [gameName, setGameName] = useState('Testing')
+    const [gameName, setGameName] = useState('Tic Tac Toe')
 
     const activateGameDetailModal = useCallback(
         (name) => () => {

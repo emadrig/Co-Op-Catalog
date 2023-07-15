@@ -42,7 +42,6 @@ const TicTacToe = ({ id, match, gameURL, game, user }) => {
     useEffect(() => {
         if (win && !recordCreated && playerID.toString() === gameState.state[9]) {
             createGameRecord({
-                score: 1,
                 game: game,
                 user: user,
             });
@@ -70,7 +69,6 @@ const TicTacToe = ({ id, match, gameURL, game, user }) => {
         navigator.clipboard.writeText(gameURL)
             .then(() => {
                 setLinkCopied(true);
-                // Send a message to the server indicating the clipboard operation was successful
                 client.current.send(
                     JSON.stringify({
                         type: "clipboard_success",

@@ -1,5 +1,5 @@
 from common.json import ModelEncoder
-from .models import Game, GamesRecord
+from .models import Game, PlayerHighScore
 from accounts.models import User
 
 class UserEncoder(ModelEncoder):
@@ -18,8 +18,8 @@ class GameEncoder(ModelEncoder):
     def get_extra_data(self, o):
         return {"gif": str(o.gif)}
 
-class GamesRecordEncoder(ModelEncoder):
-    model = GamesRecord
+class PlayerHighScoreEncoder(ModelEncoder):
+    model = PlayerHighScore
     properties = [
         "score",
         "player",

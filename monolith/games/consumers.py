@@ -68,9 +68,9 @@ class TTTMatchConsumer(WebsocketConsumer):
             }
         )
 
+    # Receive message from WebSocket
     def receive(self, text_data):
         count_of_connected_users = cache.get(self.match_id, 0)
-        # Receive message from WebSocket
         text_data_json = json.loads(text_data)
         self.match = TicTacToeMatch.objects.get(id=self.match_id)
         state = list(self.match.state)

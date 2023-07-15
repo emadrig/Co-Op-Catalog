@@ -8,28 +8,30 @@ class Game(models.Model):
     description = models.TextField()
     rules = models.TextField()
     gif = models.CharField(max_length=100)
+    multiplayer = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
 
-class GamesRecord(models.Model):
-    score = models.IntegerField()
+class PlayerHighScore(models.Model):
+    score = models.IntegerField(default=1)
 
     game = models.ForeignKey(
         Game,
-        related_name="games_record",
+        related_name="player_high_score",
         on_delete=models.CASCADE
     )
 
     player = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='games_record',
+        related_name='player_high_score',
         on_delete=models.CASCADE
     )
 
     def __str__(self):
         return str(self.id)
+
 
 class TicTacToeMatch(models.Model):
     state = models.CharField(max_length=10, default="nnnnnnnnn0")

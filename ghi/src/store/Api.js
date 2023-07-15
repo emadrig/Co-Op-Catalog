@@ -49,14 +49,14 @@ export const apiSlice = createApi({
     }),
     createGameRecord: builder.mutation({
       query: (body) => ({
-        url: '/gamerecords/',
+        url: '/high-score/',
         method: "POST",
         body: body
       })
     }),
     getLeaderBoardByGame: builder.query({
       query: (id) => ({
-        url: `gamerecords/${id}/game/`,
+        url: `high-score/${id}/game/`,
       }),
       providesTags: ["Leaderboard"]
     })
