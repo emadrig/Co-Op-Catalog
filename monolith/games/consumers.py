@@ -70,37 +70,42 @@ class TTTMatchConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        count_of_connected_users = cache.get(self.match_id, 0)
+        print("this is text_data: ", text_data)
         text_data_json = json.loads(text_data)
+
         self.match = TicTacToeMatch.objects.get(id=self.match_id)
+
         state = list(self.match.state)
+        if text_data_json['type'] == 'reset_game_board':
+            state = "nnnnnnnnn0"
+            TicTacToeMatch.objects.filter(id=self.match_id).update(state=state)
+
         player = state[9]
         letter = "X" if player == "0" else "O"
         if text_data_json['index'] != None:
             idx = text_data_json['index']
             state[idx] = letter
             winner = self.check_for_winner(state)
-            print(winner)
             if winner:
                 state.append("W")
                 new_state = "".join(state)
                 TicTacToeMatch.objects.filter(id=self.match_id).update(state=new_state)
-                new_match = TicTacToeMatch.objects.get(id=self.match_id)
+                update_match = TicTacToeMatch.objects.get(id=self.match_id)
             else:
                 player = "1" if player == "0" else "0"
                 state[9] = player
                 new_state = "".join(state)
                 TicTacToeMatch.objects.filter(id=self.match_id).update(state=new_state)
-                new_match = TicTacToeMatch.objects.get(id=self.match_id)
+                update_match = TicTacToeMatch.objects.get(id=self.match_id)
         else:
-            new_match = TicTacToeMatch.objects.get(id=self.match_id)
+            update_match = TicTacToeMatch.objects.get(id=self.match_id)
 
         # Send message to match group
         async_to_sync(self.channel_layer.group_send)(
             self.match_group_id,
             {
                 'type': 'chat_message',
-                'state': new_match.state
+                'state': update_match.state
             }
         )
 

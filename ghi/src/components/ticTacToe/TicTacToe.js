@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useCreateGameRecordMutation } from '../../store/Api';
 import './TicTacToe.css'
@@ -46,7 +46,8 @@ const TicTacToe = ({ id, match, gameURL, game, user }) => {
                 user: user,
             });
             setRecordCreated(true);
-    }})
+        }
+    })
 
 
 
@@ -97,6 +98,16 @@ const TicTacToe = ({ id, match, gameURL, game, user }) => {
         </tr>
     );
 
+    const playAgain = () => {
+        setRecordCreated(false)
+        client.current.send(
+            JSON.stringify({
+                type: "reset_game_board",
+                index: null,
+            })
+        );
+    }
+
     return (
         <div id='game'>
             {playerCount < 2 ?
@@ -106,7 +117,11 @@ const TicTacToe = ({ id, match, gameURL, game, user }) => {
                 : (
                     <>
                         {win &&
-                            <h1>{playerID.toString() === gameState.state[9] ? "You won" : "You lost"}</h1>}
+                            <>
+                                <h1>{playerID.toString() === gameState.state[9] ? "You won" : "You lost"}</h1>
+                                <button onClick={playAgain}>Play Again</button>
+                            </>
+                        }
                         <table>
                             <tbody>
                                 {renderRow(0)}

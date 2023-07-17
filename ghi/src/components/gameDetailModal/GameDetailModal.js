@@ -17,33 +17,38 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={() => setModalIsOpen(false)}
-                    className="modal"
+                    id="modal"
+                    className="content"
+                    overlayClassName="overlay"
                 >
                     {isLoading ? <div>Loading...</div> : (
-                        <div className="container">
-                            <div className="row">
-                                <div className="column" id="left-column">
-                                    <div className="cell" id="game-area">
-                                        <img src={require(`../../${game.gif}`)} id="big-game-img" />
+                        <>
+                            <h1>{game.name}</h1>
+                            <div className="container">
+                                <div className="row">
+                                    <div className="column" id="left-column">
+                                        <div className="cell" id="game-area">
+                                            <img src={require(`../../${game.gif}`)} id="big-game-img" />
+                                        </div>
+                                        <div className="row" id="game-pictures">
+                                            <div className="cell">Picture of game</div>
+                                            <div className="cell">Picture of game</div>
+                                            <div className="cell">Picture of game</div>
+                                        </div>
+                                        <div className="row" id="play-options">
+                                            <Link to={`/play/${game.name}`} className="cell" id="play-against-friend">Play against Friend</Link>
+                                            <div className="cell" id="play-against-computer">Play against Computer</div>
+                                        </div>
+                                        <div className="cell" id="description">{game.description}</div>
                                     </div>
-                                    <div className="row" id="game-pictures">
-                                        <div className="cell">Picture of game</div>
-                                        <div className="cell">Picture of game</div>
-                                        <div className="cell">Picture of game</div>
-                                    </div>
-                                    <div className="row" id="play-options">
-                                        <Link to={`/play/${game.name}`} className="cell">Play against Friend</Link>
-                                        <div className="cell">Play against Computer</div>
-                                    </div>
-                                    <div className="cell" id="description">Description: { game.description }</div>
-                                </div>
-                                <div className="column" id="right-column">
-                                    <div className="cell">
-                                        <Leaderboard id={game.id} />
+                                    <div className="column" id="right-column">
+                                        <div className="cell">
+                                            <Leaderboard id={game.id} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </>
                     )}
                 </Modal>
             </div>

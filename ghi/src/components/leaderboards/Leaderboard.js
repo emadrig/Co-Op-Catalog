@@ -1,11 +1,12 @@
 import { useGetLeaderBoardByGameQuery } from "../../store/Api";
+import './Leaderboard.css'
 
 
 function Leaderboard({ id }) {
     const { data: game } = useGetLeaderBoardByGameQuery(id)
 
     return (
-        <>
+        <div id="leaderboard">
             <div>
                 <h1>Leaderboard</h1>
             </div>
@@ -32,7 +33,7 @@ function Leaderboard({ id }) {
                     :
                     <div>Loading</div>}
             </div>
-        </>
+        </div>
     )
 }
 

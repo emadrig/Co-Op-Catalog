@@ -1,10 +1,32 @@
-.modal {
-  background-color: gray;
+#modal {
   width: 100%;
   max-width: 1000px;
   margin-right: auto;
   margin-left: auto;
   margin-top: 10vh;
+  border-radius: 50px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
+}
+
+.content {
+  /* position: absolute; */
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  background: #373952;
+  outline: none;
+  border-radius: 50px;
+  border: 20px solid #1a1b28;
 }
 
 .container {
@@ -14,7 +36,7 @@
 }
 
 .row {
-  background-color: white;
+  background-color: #1a1b28;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -26,36 +48,71 @@
 }
 
 #left-column {
-    width: 75%;
+  width: 75%;
 }
 
 #right-column {
-    width: 25%;
+  width: 25%;
 }
 
 .cell {
-  border: 1px solid #ccc;
   padding: 10px;
   margin: 5px;
   flex-grow: 1;
 }
 
 #game-area {
-    height: 400px;
+  height: auto;
 }
 
 #big-game-img {
   width: 100%;
+  border-radius: 50px;
 }
 
 #game-pictures {
-    height: 150px;
+  height: 150px;
 }
 
 #play-options {
-    height: 75px;
+  height: 75px;
 }
 
 #description {
-    height: 200px;
+  height: auto;
+  color: rgb(118, 122, 142);
+}
+
+#play-against-friend {
+  border-radius: 30px;
+  transition: all 250ms ease 0s;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  box-sizing: border-box;
+  padding: 8px 16px;
+  background: rgb(55, 57, 82);
+  color: rgb(249, 250, 255);
+  height: 60px;
+}
+
+#play-against-computer {
+  border-radius: 30px;
+  transition: all 250ms ease 0s;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  box-sizing: border-box;
+  padding: 8px 16px;
+  background: #373952;
+  color: white;
+  height: 60px;
 }
