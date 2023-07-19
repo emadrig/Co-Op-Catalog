@@ -52,7 +52,7 @@ export const apiSlice = createApi({
         url: '/high-score/',
         method: "POST",
         body: body
-      })
+      }), invalidatesTags: ["Leaderboard"]
     }),
     getLeaderBoardByGame: builder.query({
       query: (id) => ({
