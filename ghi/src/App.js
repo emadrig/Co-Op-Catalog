@@ -15,13 +15,21 @@ function ProtectedRoutes() {
   const navigate = useNavigate();
   const token = useSelector(state => state.token)
   let user_id = null;
+  let expiration = false
+
 
   if (token) {
-    user_id = jwt_decode(token).user_id
+    const decodedToken = jwt_decode(token)
+    user_id = decodedToken.user_id
+    if (decodedToken.exp * 1000 < Date.now()) {
+      expiration = true
+      console.log(expiration)
+    }
+
   }
 
   useEffect(() => {
-    if (!token) {
+    if (!token || expiration) {
       navigate('/login');
     } else {
       fetch(`http://localhost:8000/api/accounts/${user_id}/`)
@@ -33,12 +41,15 @@ function ProtectedRoutes() {
   }, [token, dispatch, navigate, user_id]);
 
   return (
+    <>
+    <NavBar />
     <Routes>
       <Route path="/login" element={<LoginForm />} />
       <Route path='/' element={<MainPage />} />
       <Route path='/play/:gameName/' element={<PlayGamePage />} />
       <Route path='/play/:gameName/:id/' element={<PlayGamePage />} />
     </Routes>
+    </>
   );
 }
 
@@ -46,7 +57,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <NavBar />
+
         <ProtectedRoutes />
       </BrowserRouter>
     </>
