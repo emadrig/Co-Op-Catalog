@@ -17,9 +17,9 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={() => setModalIsOpen(false)}
-                    id="modal"
-                    className="content"
-                    overlayClassName="overlay"
+                    id="game-detail-modal"
+                    className="game-detail-content"
+                    overlayClassName="game-detail-overlay"
                 >
                     {isLoading ? <div>Loading...</div> : (
                         <>

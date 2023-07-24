@@ -1,8 +1,9 @@
 import { useGetTokenMutation } from "../../store/Api";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../store/tokenSlice';
 import { useNavigate } from 'react-router-dom';
+import SignupModal from "../signupModal/SignupModal";
 import './LoginForm.css'
 
 
@@ -12,9 +13,10 @@ let initialData = {
 };
 
 const LoginForm = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
   const [getToken] = useGetTokenMutation();
-  const dispatch = useDispatch();  // get dispatch
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState(initialData);
 
 
@@ -36,10 +38,14 @@ const LoginForm = () => {
     }
   };
 
+  const activateSignupModal = () => {
+      setModalIsOpen(true)
+  }
+
   return (
     <>
       <div className="" id="login-form">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
           <h1 className="">User Login</h1>
           <div className="mb-3">
             <input
@@ -73,12 +79,13 @@ const LoginForm = () => {
               Login
             </button>
           </div>
-          <div>
-            <p className="">
-              Don't have an account?
-            </p>
-          </div>
         </form>
+        <div>
+          <button onClick={activateSignupModal} className="">
+            Don't have an account?
+          </button>
+        </div>
+        <SignupModal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.urls import re_path
-from games.consumers import MatchConsumer
+from games.ttt_consumer import MatchConsumer
 
 websocket_urlpatterns = [
     re_path(r'^ws/(?P<game>[^/]+)/(?P<match>[^/]+)/$', MatchConsumer.as_asgi()),

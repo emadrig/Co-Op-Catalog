@@ -29,10 +29,17 @@ export const apiSlice = createApi({
         url: `/api/accounts/${id}/`
       }),
     }),
+    createUser: builder.mutation({
+      query: (info) => ({
+        url: 'api/accounts/',
+        method: 'POST',
+        body: info,
+      }),
+    }),
     logOut: builder.mutation({
       query: () => ({
         url: "/api/token/",
-        method: "delete",
+        method: "DELETE",
       }),
       invalidatesTags: ["Account", "Token"],
     }),
@@ -65,6 +72,7 @@ export const apiSlice = createApi({
 
 export const {
   useGetTokenMutation,
+  useCreateUserMutation,
   useLogOutMutation,
   useGetGamesQuery,
   useGetGameDetailsQuery,

@@ -1,0 +1,35 @@
+#signup-modal {
+  width: 300px;
+  height: auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 10vh;
+  border-radius: 50px;
+}
+
+.signup-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
+}
+
+.signup-modal-content {
+  /* position: absolute; */
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  background: #373952;
+  outline: none;
+  border-radius: 50px;
+  border: 20px solid #1a1b28;
+}
+
+#signup-form {
+    padding: 20px;
+    text-align: center;
+}

@@ -1,7 +1,7 @@
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 from chat.consumers import TextRoomConsumer
-from games.consumers import TTTMatchConsumer
+from games.consumers.ttt_consumer import TTTMatchConsumer
 from django.urls import re_path
 
 

@@ -35,3 +35,8 @@ class PlayerHighScore(models.Model):
 
 class TicTacToeMatch(models.Model):
     state = models.CharField(max_length=10, default="nnnnnnnnn0")
+
+
+class BattleshipMatch(models.Model):
+    player_one_board = models.JSONField()
+    player_two_board = models.JSONField()

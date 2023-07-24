@@ -1,18 +1,20 @@
 import { useLogOutMutation } from "../../store/Api";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setToken } from "../../store/tokenSlice";
 
 function LogOutButton() {
-    const [logout, { isLoading }] = useLogOutMutation();
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const handleLogout = async () => {
-        await logout();
         localStorage.removeItem('token');
+        dispatch(setToken(null));
         navigate('/login')
     };
 
     return (
-        <button onClick={handleLogout} disabled={isLoading}>
+        <button onClick={handleLogout}>
             Logout
         </button>
     );
