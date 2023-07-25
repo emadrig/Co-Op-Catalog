@@ -1,5 +1,5 @@
 from accounts.models import User
-from .models import Game, PlayerHighScore, TicTacToeMatch
+from .models import Game, PlayerHighScore, TicTacToeMatch, BattleshipMatch
 from rest_framework import serializers
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -46,4 +46,13 @@ class TicTacToeMatchSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'state',
             'id'
+        ]
+
+class BattleshipMatchSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = BattleshipMatch
+        fields = [
+            'player_one_board',
+            'player_two_board',
+            'id',
         ]

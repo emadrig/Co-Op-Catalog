@@ -7,7 +7,7 @@ import './MainPage.css'
 function MainPage() {
     const { data: games, isLoading } = useGetGamesQuery()
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [gameName, setGameName] = useState('Tic Tac Toe')
+    const [gameName, setGameName] = useState('TicTacToe')
 
     const activateGameDetailModal = useCallback(
         (name) => () => {

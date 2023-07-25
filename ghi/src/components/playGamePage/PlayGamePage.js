@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import './PlayGamePage.css'
 import Chat from "../chat/chat";
 import TicTacToe from "../ticTacToe/TicTacToe";
+import Battleship from "../battleship/Battleship";
 import jwt_decode from "jwt-decode"
 import { useSelector } from 'react-redux';
 
@@ -18,13 +19,21 @@ function PlayGamePage() {
     const user = jwt_decode(token).user_id
 
 
+    const componentMap = {
+        'TicTacToe': TicTacToe,
+        'Battleship': Battleship,
+    };
+
+    const GameComponent = componentMap[gameName];
+
+
     useEffect(() => {
         if (id === undefined) {
-            fetch('http://localhost:8000/tictactoe-match/', { method: "POST" })
+            fetch(`http://localhost:8000/${gameName}-match/`, {method: "POST"})
                 .then(res => res.json())
                 .then(data => {
                     const newMatch = data['id'];
-                    const newGameURL = `http://localhost:3000/play/Tic%20Tac%20Toe/${data['id']}`;
+                    const newGameURL = `http://localhost:3000/play/${gameName}/${data['id']}`;
                     setMatch(newMatch);
                     setGameURL(newGameURL);
                     setProps({
@@ -52,8 +61,9 @@ function PlayGamePage() {
             <>
                 <div className="play-games-page">
                     <h1>{game.name}</h1>
+
                     <div id="play-game-area">
-                        <TicTacToe id={props.id} match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
+                        <GameComponent id={props.id} match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
                     </div>
                     <div>{game.description}</div>
                     <div>{game.rules}</div>

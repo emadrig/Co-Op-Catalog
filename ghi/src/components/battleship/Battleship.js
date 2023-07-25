@@ -5,30 +5,35 @@ import './Battleship.css'
 
 
 const Battleship = ({ id, match, gameURL, game, user }) => {
-    const [gameState, setGameState] = useState({ "playerOneBoard": "", "playerTwoBoard": "" });
+    const [playerOneBoard, setPlayerOneBoard] = useState(null);
+    const [playerTwoBoard, setPlayerTwoBoard] = useState(null);
+    const [currentPlayer, setCurrentPlayer] = useState(null);
     const [playerCount, setPlayerCount] = useState(1)
-    const playerID = id ? 1 : 0
+    const [win, setWin] = useState(false)
+    const playerID = id ? 2 : 1
     const client = useRef(null);
     const [linkCopied, setLinkCopied] = useState(false);
-    const [win, setWin] = useState(false)
     const [createGameRecord] = useCreateGameRecordMutation()
     const [recordCreated, setRecordCreated] = useState(false);
 
+    console.log("currentPlayer: ", currentPlayer);
+    console.log('playerID: ', playerID);
 
     useEffect(() => {
         if (match) {
-            client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/battleship/' + match + '/');
+            client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/Battleship/' + match + '/');
             client.current.onopen = () => {
                 console.log("WebSocket Client Connected for Battleship");
             };
             client.current.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
+                console.log('dataFromServer: ', dataFromServer);
                 if (dataFromServer) {
-                    setGameState({
-                        state: dataFromServer.state,
-                    });
+                    setPlayerOneBoard(dataFromServer.player_one_board);
+                    setPlayerTwoBoard(dataFromServer.player_two_board);
+                    setCurrentPlayer(dataFromServer.current_player)
                     setPlayerCount(dataFromServer.count_of_connected_users)
-                    setWin(dataFromServer.state[10] === "W")
+                    setWin(dataFromServer.winner)
                 }
             };
             // Clean up the connection when the component is unmounted
@@ -40,7 +45,7 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
 
 
     useEffect(() => {
-        if (win && !recordCreated && playerID.toString() === gameState.state[9]) {
+        if (win && !recordCreated && playerID === currentPlayer) {
             createGameRecord({
                 game: game,
                 user: user,
@@ -50,10 +55,8 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
     })
 
 
-
-
     const onButtonClicked = (index) => {
-        if (playerID.toString() === gameState.state[9]) {
+        if (playerID === currentPlayer) {
             client.current.send(
                 JSON.stringify({
                     type: "message",
@@ -83,21 +86,6 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
     };
 
 
-    const renderRow = (start) => (
-        <tr>
-            {Array(3).fill().map((_, i) => (
-                <td key={start + i}>
-                    <button
-                        disabled={gameState.state[start + i] !== "n" || playerID.toString() !== gameState.state[9] || win}
-                        onClick={() => onButtonClicked(start + i)}
-                    >
-                        {gameState.state[start + i]}
-                    </button>
-                </td>
-            ))}
-        </tr>
-    );
-
     const playAgain = () => {
         setRecordCreated(false)
         client.current.send(
@@ -108,9 +96,27 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
         );
     }
 
+
+    const renderRow = (board, row) => (
+        <tr key={row}>
+            {[...board[row]].map((cell, i) => (
+                <td key={row * 10 + i} className='game-space'>
+                    <button
+                        disabled={cell !== "n" || playerID !== currentPlayer || win}
+                        onClick={() => onButtonClicked(row * 10 + i)}
+                        className='game-button'
+                    >
+                        {cell}
+                    </button>
+                </td>
+            ))}
+        </tr>
+    );
+
+
     return (
         <div id='game'>
-            {playerCount < 2 ?
+            {playerCount < 0 ? // Will need to change the 0 to a 2 later
                 <button onClick={copyToClipboard}>
                     {linkCopied ? "Link copied to clipboard. Waiting for friend to join." : "Invite your friend"}
                 </button>
@@ -118,20 +124,34 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
                     <>
                         {win &&
                             <>
-                                <h1>{playerID.toString() === gameState.state[9] ? "You won" : "You lost"}</h1>
+                                <h1>{playerID === currentPlayer ? "You won" : "You lost"}</h1>
                                 <button onClick={playAgain}>Play Again</button>
                             </>
                         }
-                        <table>
-                            <tbody>
-                                {renderRow(0)}
-                                {renderRow(3)}
-                                {renderRow(6)}
-                            </tbody>
-                        </table>
+                        {playerOneBoard &&
+                            <div id='game-boards'>
+                                <div className='player-board'>
+                                    <h1>Your Board</h1>
+                                    <table>
+                                        <tbody>
+                                            {playerOneBoard.map((row, i) => renderRow(playerOneBoard, i))}
+                                        </tbody>
+                                    </table>
+                                </div >
+                                <div className='player-board'>
+                                    <h1>Enemy's Board</h1>
+                                    <table>
+                                        <tbody>
+                                            {playerTwoBoard.map((row, i) => renderRow(playerTwoBoard, i))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
                     </>
-                )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 

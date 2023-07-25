@@ -38,5 +38,7 @@ class TicTacToeMatch(models.Model):
 
 
 class BattleshipMatch(models.Model):
-    player_one_board = models.JSONField()
-    player_two_board = models.JSONField()
+    player_one_board = models.JSONField(default=['          '] * 10)
+    player_two_board = models.JSONField(default=['          '] * 10)
+    current_player = models.IntegerField(default=1)
+    winner = models.BooleanField(default=False)

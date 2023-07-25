@@ -17,7 +17,7 @@ const TicTacToe = ({ id, match, gameURL, game, user }) => {
 
     useEffect(() => {
         if (match) {
-            client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/tic_tac_toe/' + match + '/');
+            client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/TicTacToe/' + match + '/');
             client.current.onopen = () => {
                 console.log("WebSocket Client Connected for TicTacToe");
             };

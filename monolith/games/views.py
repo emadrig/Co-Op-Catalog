@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
-from .models import Game, PlayerHighScore, TicTacToeMatch
-from .serializers import GameDetailSerializer, GameListSerializer, PlayerHighScoreSerializer, TicTacToeMatchSerializer
+from .models import Game, PlayerHighScore, TicTacToeMatch, BattleshipMatch
+from .serializers import GameDetailSerializer, GameListSerializer, PlayerHighScoreSerializer, TicTacToeMatchSerializer, BattleshipMatchSerializer
 from accounts.models import User
 
 
@@ -85,5 +85,22 @@ class TicTacToeMatchViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'], url_path='match', url_name='match_id')
     def get_by_id(self, request, pk=None):
         match = get_object_or_404(TicTacToeMatch, id=pk)
+        serializer = self.get_serializer(match)
+        return Response(serializer.data)
+
+
+class BattleshipMatchViewSet(viewsets.ModelViewSet):
+    queryset = BattleshipMatch.objects.all()
+    serializer_class = BattleshipMatchSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request):
+        match = BattleshipMatch.objects.create()
+        serializer = self.get_serializer(match)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], url_path='match', url_name='match_id')
+    def get_by_id(self, request, pk=None):
+        match = get_object_or_404(BattleshipMatch, id=pk)
         serializer = self.get_serializer(match)
         return Response(serializer.data)
