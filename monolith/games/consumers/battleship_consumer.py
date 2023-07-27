@@ -53,6 +53,15 @@ class BattleshipMatchConsumer(WebsocketConsumer):
             self.channel_name
         )
 
+        board1 = setup_game_board()
+        board2 = setup_game_board()
+
+        BattleshipMatch.objects.filter(id=self.match_id).update(player_one_board=board1)
+        BattleshipMatch.objects.filter(id=self.match_id).update(player_two_board=board2)
+        match = BattleshipMatch.objects.get(id=self.match_id)
+
+        print('match: ', match)
+
         # get current count of connected users or default to 0 if it doesn't exist
         count_of_connected_users = cache.get(self.match_id, 0)
         # increment the count of connected users
@@ -61,8 +70,8 @@ class BattleshipMatchConsumer(WebsocketConsumer):
             self.match_group_id,
             {
                 'type': 'chat_message',
-                'player_one_board': setup_game_board(),
-                'player_two_board': setup_game_board(),
+                'player_one_board': match.player_one_board,
+                'player_two_board': match.player_two_board,
                 'current_player': 1,
                 'winner': False
             }
@@ -86,7 +95,10 @@ class BattleshipMatchConsumer(WebsocketConsumer):
             self.match_group_id,
             {
                 'type': 'chat_message',
-                'state': BattleshipMatch.objects.get(id=self.match_id).state,
+                'player_one_board': BattleshipMatch.objects.get(id=self.match_id).player_one_board,
+                'player_two_board': BattleshipMatch.objects.get(id=self.match_id).player_two_board,
+                'current_player': BattleshipMatch.objects.get(id=self.match_id).current_player,
+                'winner': BattleshipMatch.objects.get(id=self.match_id).winner,
                 'count_of_connected_users': count_of_connected_users
             }
         )
@@ -107,7 +119,12 @@ class BattleshipMatchConsumer(WebsocketConsumer):
             player_two_board = ['          '] * 10
             BattleshipMatch.objects.filter(id=self.match_id).update(player_one_board=player_one_board, player_two_board=player_two_board)
         if text_data_json['type'] == 'move':
-            pass
+            new_current_player = 2 if current_player == 1 else 1
+            BattleshipMatch.objects.filter(id=self.match_id).update(current_player=new_current_player)
+            match = BattleshipMatch.objects.get(id=self.match_id)
+            current_player = match.current_player
+            print('current_player', current_player)
+            print(text_data_json['index'])
             # idx = text_data_json['index']
             # state[idx] = letter
             # winner = self.check_for_winner(state)

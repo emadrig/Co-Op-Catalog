@@ -56,10 +56,10 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
 
 
     const onButtonClicked = (index) => {
-        if (playerID === currentPlayer) {
+        if (playerID === currentPlayer) { //Will need to check if it's the player's turn or not
             client.current.send(
                 JSON.stringify({
-                    type: "message",
+                    type: "move",
                     index: index,
                 })
             );
@@ -102,7 +102,7 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
             {[...board[row]].map((cell, i) => (
                 <td key={row * 10 + i} className='game-space'>
                     <button
-                        disabled={cell !== "n" || playerID !== currentPlayer || win}
+                        disabled={cell !== "." || playerID !== currentPlayer || win}
                         onClick={() => onButtonClicked(row * 10 + i)}
                         className='game-button'
                     >

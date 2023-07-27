@@ -52,7 +52,7 @@ function PlayGamePage() {
     }, [])
 
 
-    if (isLoading) {
+    if (isLoading || props.match === undefined) {
         return (
             <div>Loading...</div>
         )
@@ -63,6 +63,7 @@ function PlayGamePage() {
                     <h1>{game.name}</h1>
 
                     <div id="play-game-area">
+
                         <GameComponent id={props.id} match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
                     </div>
                     <div>{game.description}</div>
