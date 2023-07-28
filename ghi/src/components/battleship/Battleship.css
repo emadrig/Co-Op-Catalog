@@ -21,3 +21,34 @@
     margin: 0;
     cursor: pointer;
 }
+
+.your-board {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.ocean {
+    height: 28px;
+    width: 28px;
+    margin: 0;
+    cursor: pointer;
+    background-color: blue;
+}
+
+.hit {
+    height: 28px;
+    width: 28px;
+    margin: 0;
+    cursor: pointer;
+    background-color: red;
+}
+
+.destroyed {
+    height: 28px;
+    width: 28px;
+    margin: 0;
+    cursor: pointer;
+    background-color: rgb(0, 0, 0);
+}

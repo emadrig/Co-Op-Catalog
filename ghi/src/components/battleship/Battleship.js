@@ -15,7 +15,11 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
     const [linkCopied, setLinkCopied] = useState(false);
     const [createGameRecord] = useCreateGameRecordMutation()
     const [recordCreated, setRecordCreated] = useState(false);
+    const [playerOneCount, setPlayerOneCount] = useState({'A': 0, 'B': 1, 'C': 2, 'D': 2, 'E': 3, 'sunk': 0})
+    const [playerTwoCount, setplayerTwoCount] = useState({'A': 0, 'B': 1, 'C': 2, 'D': 2, 'E': 3, 'sunk': 0})
 
+
+    console.log('playerOneCount: ', playerOneCount);
     console.log("currentPlayer: ", currentPlayer);
     console.log('playerID: ', playerID);
 
@@ -33,6 +37,8 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
                     setPlayerTwoBoard(dataFromServer.player_two_board);
                     setCurrentPlayer(dataFromServer.current_player)
                     setPlayerCount(dataFromServer.count_of_connected_users)
+                    setPlayerOneCount(dataFromServer.player_one_count)
+                    setplayerTwoCount(dataFromServer.player_two_count)
                     setWin(dataFromServer.winner)
                 }
             };
@@ -97,21 +103,67 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
     }
 
 
-    const renderRow = (board, row) => (
-        <tr key={row}>
-            {[...board[row]].map((cell, i) => (
-                <td key={row * 10 + i} className='game-space'>
-                    <button
-                        disabled={cell !== "." || playerID !== currentPlayer || win}
-                        onClick={() => onButtonClicked(row * 10 + i)}
-                        className='game-button'
-                    >
-                        {cell}
-                    </button>
-                </td>
-            ))}
-        </tr>
-    );
+    const cellStyling = (cell, whoseBoard) => {
+        if (whoseBoard == 'your-board') {
+            if (cell === ' ') {
+                return 'ocean'
+            } else if (cell === cell.toLowerCase() && playerTwoCount[cell.toUpperCase()] >= 5) {
+                return 'destroyed'
+            }else if (cell === 'm') {
+                return 'miss'
+            } else if (cell === cell.toLowerCase() && cell !== '.') {
+                return 'hit'
+            }
+        } else {
+            if (cell !== cell.toLowerCase() || cell === ' ') {
+                return 'ocean'
+            } else if (cell === cell.toLowerCase() && playerOneCount[cell] >= 5) {
+                return 'destroyed'
+            } else if (cell === cell.toLowerCase() && cell !== 'm') {
+                return 'hit'
+            }  else {
+                return 'miss'
+            }
+        }
+
+    }
+
+
+    const renderRow = (board, row, whoseBoard) => {
+        if (whoseBoard === 'your-board') {
+            return (
+                <tr key={row}>
+                    {[...board[row]].map((cell, i) => (
+                        <td key={row * 10 + i} className='game-space'>
+                            <div
+                                disabled={playerID !== currentPlayer || win}
+                                onClick={() => onButtonClicked(row * 10 + i)}
+                                className={cellStyling(cell, whoseBoard)}
+                            >
+                                {cell}
+                            </div>
+                        </td>
+                    ))}
+                </tr>
+            )
+        } else {
+            return (
+                <tr key={row}>
+                    {[...board[row]].map((cell, i) => (
+                        <td key={row * 10 + i} className='game-space'>
+                            <div
+                                disabled={cell !== ' ' || playerID !== currentPlayer || win}
+                                onClick={() => onButtonClicked(row * 10 + i)}
+                                className={cellStyling(cell, whoseBoard)}
+                            >
+                            </div>
+                        </td>
+                    ))}
+                </tr>
+            )
+        }
+
+    };
 
 
     return (
@@ -128,26 +180,32 @@ const Battleship = ({ id, match, gameURL, game, user }) => {
                                 <button onClick={playAgain}>Play Again</button>
                             </>
                         }
-                        {playerOneBoard &&
-                            <div id='game-boards'>
-                                <div className='player-board'>
-                                    <h1>Your Board</h1>
-                                    <table>
-                                        <tbody>
-                                            {playerOneBoard.map((row, i) => renderRow(playerOneBoard, i))}
-                                        </tbody>
-                                    </table>
-                                </div >
-                                <div className='player-board'>
-                                    <h1>Enemy's Board</h1>
-                                    <table>
-                                        <tbody>
-                                            {playerTwoBoard.map((row, i) => renderRow(playerTwoBoard, i))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div id='game-boards'>
+                            <div className='player-board'>
+                                <h1>Your Board</h1>
+                                <table>
+                                    <tbody>
+                                        {playerOneBoard && playerID === 1 ?
+                                            playerOneBoard.map((row, i) => renderRow(playerOneBoard, i, 'your-board'))
+                                            :
+                                            playerTwoBoard && playerTwoBoard.map((row, i) => renderRow(playerTwoBoard, i, 'your-board'))
+                                        }
+                                    </tbody>
+                                </table>
+                            </div >
+                            <div className='player-board'>
+                                <h1>Enemy's Board</h1>
+                                <table>
+                                    <tbody>
+                                        {playerTwoBoard && playerID === 1 ?
+                                            playerTwoBoard.map((row, i) => renderRow(playerTwoBoard, i, 'enemy-board'))
+                                            :
+                                            playerOneBoard && playerOneBoard.map((row, i) => renderRow(playerOneBoard, i, 'enemy-board'))
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-                        }
+                        </div>
                     </>
                 )
             }
