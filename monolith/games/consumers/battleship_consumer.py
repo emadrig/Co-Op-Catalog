@@ -79,16 +79,42 @@ class BattleshipMatchConsumer(WebsocketConsumer):
         player_two_count = self.match.player_two_count
         current_player = self.match.current_player
         winner = self.match.winner
+
+
         if text_data_json['type'] == 'reset_game_board':
             player_one_board = setup_game_board()
+            player_one_count = {
+                'A': 0,
+                'B': 1,
+                'C': 2,
+                'D': 2,
+                'E': 3,
+                'sunk': 0
+            }
             player_two_board = setup_game_board()
-            BattleshipMatch.objects.filter(id=self.match_id).update(player_one_board=player_one_board, player_two_board=player_two_board)
+            player_two_count = {
+                'A': 0,
+                'B': 1,
+                'C': 2,
+                'D': 2,
+                'E': 3,
+                'sunk': 0
+            }
+            winner = False
+            BattleshipMatch.objects.filter(id=self.match_id).update(player_one_board=player_one_board,
+                                                                    player_one_count=player_one_count,
+                                                                    player_two_board=player_two_board,
+                                                                    player_two_count=player_two_count,
+                                                                    winner=winner)
+
+
         if text_data_json['type'] == 'move':
             index = text_data_json['index']
             row = 0
             remainder = 0
             if index <= 9:
                 row = 0
+                remainder = index
             else:
                 row = index // 10
                 remainder = index % 10
@@ -103,9 +129,7 @@ class BattleshipMatchConsumer(WebsocketConsumer):
             if char.isalpha() and char != 'm':
                 board[row][remainder] = char.lower()
                 if current_player == 1:
-                    print('before', player_two_count)
                     player_two_count[char] += 1
-                    print('after', player_two_count)
                     if player_two_count[char] == 5:
                         player_two_count['sunk'] += 1
                     BattleshipMatch.objects.filter(id=self.match_id).update(player_two_board=board, player_two_count=player_two_count)
@@ -115,15 +139,20 @@ class BattleshipMatchConsumer(WebsocketConsumer):
                     if player_one_count[char] == 5:
                         player_one_count['sunk'] += 1
                     BattleshipMatch.objects.filter(id=self.match_id).update(player_one_board=board, player_one_count=player_one_count)
+            else:
+                if current_player == 1:
+                    board[row][remainder] = 'm'
+                    BattleshipMatch.objects.filter(id=self.match_id).update(player_two_board=board)
+                else:
+                    board[row][remainder] = 'm'
+                    BattleshipMatch.objects.filter(id=self.match_id).update(player_one_board=board)
 
-            if player_two_count['sunk'] >= 5 or player_one_count['sunk'] >= 5:
-                winner = True
-
+            winner = player_one_count['sunk'] == 5 or player_two_count['sunk'] == 5
             self.match = BattleshipMatch.objects.get(id=self.match_id)
             player_one_board = list(self.match.player_one_board)
             player_two_board = list(self.match.player_two_board)
             current_player = self.match.current_player
-            winner = self.match.winner
+
 
 
 

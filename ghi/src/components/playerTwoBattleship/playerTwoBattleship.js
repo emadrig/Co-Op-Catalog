@@ -4,19 +4,19 @@ import { useCreateGameRecordMutation } from '../../store/Api';
 import './Battleship.css'
 
 
-const Battleship = ({ match, gameURL, game, user }) => {
+const PlayerTwoBattleship = ({ match, gameURL, game, user }) => {
     const [playerOneBoard, setPlayerOneBoard] = useState(null);
     const [playerTwoBoard, setPlayerTwoBoard] = useState(null);
-    const [playerOneCount, setPlayerOneCount] = useState({ 'A': 0, 'B': 1, 'C': 2, 'D': 2, 'E': 3, 'sunk': 0 })
-    const [playerTwoCount, setplayerTwoCount] = useState({ 'A': 0, 'B': 1, 'C': 2, 'D': 2, 'E': 3, 'sunk': 0 })
     const [currentPlayer, setCurrentPlayer] = useState(null);
     const [playerCount, setPlayerCount] = useState(1)
     const [win, setWin] = useState(false)
-    const playerID = 1
+    const playerID = 2
     const client = useRef(null);
     const [linkCopied, setLinkCopied] = useState(false);
     const [createGameRecord] = useCreateGameRecordMutation()
     const [recordCreated, setRecordCreated] = useState(false);
+    const [playerOneCount, setPlayerOneCount] = useState({ 'A': 0, 'B': 1, 'C': 2, 'D': 2, 'E': 3, 'sunk': 0 })
+    const [playerTwoCount, setplayerTwoCount] = useState({ 'A': 0, 'B': 1, 'C': 2, 'D': 2, 'E': 3, 'sunk': 0 })
 
 
     console.log('playerOneCount: ', playerOneCount);
@@ -107,11 +107,11 @@ const Battleship = ({ match, gameURL, game, user }) => {
         if (whoseBoard === 'your-board') {
             if (cell === ' ') {
                 return 'ocean'
-            } else if (cell === 'm') {
+            }else if (cell === 'm') {
                 return 'miss'
-            } else if (cell === cell.toLowerCase() && playerOneCount[cell.toUpperCase()] >= 5) {
+            } else if (cell === cell.toLowerCase() && playerTwoCount[cell.toUpperCase()] >= 5) {
                 return 'destroyed'
-            } else if (cell === cell.toLowerCase() && cell !== '.') {
+            }  else if (cell === cell.toLowerCase() && cell !== '.') {
                 return 'hit'
             } else if (cell !== ' ' && cell.match(/[A-Z]/i) && cell !== cell.toLowerCase()) {
                 return 'ship'
@@ -121,7 +121,7 @@ const Battleship = ({ match, gameURL, game, user }) => {
                 return 'ocean'
             } else if (cell === 'm') {
                 return 'miss'
-            } else if (cell === cell.toLowerCase() && playerTwoCount[cell.toUpperCase()] >= 5) {
+            } else if (cell === cell.toLowerCase() && playerOneCount[cell.toUpperCase()] >= 5) {
                 return 'destroyed'
             } else if (cell === cell.toLowerCase() && cell !== 'm') {
                 return 'hit'
@@ -164,7 +164,7 @@ const Battleship = ({ match, gameURL, game, user }) => {
                     <>
                         {win &&
                             <>
-                                <h1>{playerID === currentPlayer ? "You Lost" : "You won"}</h1>
+                                <h1>{playerID === currentPlayer ? "You Lost" : "You Won"}</h1>
                                 <button onClick={playAgain}>Play Again</button>
                             </>
                         }
@@ -183,7 +183,7 @@ const Battleship = ({ match, gameURL, game, user }) => {
                                 <table>
                                     <tbody>
                                         {playerOneBoard &&
-                                            playerOneBoard.map((row, i) => renderRow(playerOneBoard, i, 'your-board'))}
+                                            playerOneBoard.map((row, i) => renderRow(playerOneBoard, i, 'enemy-board'))}
                                     </tbody>
                                 </table>
                             </div >
@@ -196,7 +196,7 @@ const Battleship = ({ match, gameURL, game, user }) => {
                                 <table>
                                     <tbody>
                                         {playerTwoBoard &&
-                                            playerTwoBoard.map((row, i) => renderRow(playerTwoBoard, i, 'enemy-board'))}
+                                            playerTwoBoard.map((row, i) => renderRow(playerTwoBoard, i, 'your-board'))}
                                     </tbody>
                                 </table>
                             </div>
@@ -208,4 +208,4 @@ const Battleship = ({ match, gameURL, game, user }) => {
     );
 };
 
-export default Battleship;
+export default PlayerTwoBattleship;

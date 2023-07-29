@@ -1,0 +1,21 @@
+.play-games-page {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 5%;
+    background-color: #373952;
+    border-radius: 50px;
+    padding: 50px;
+    justify-content: center;
+    color: white;
+    max-width: 1000px;
+}
+
+#play-game-area {
+    width: 100%;
+    height: 50vh;
+    background-color: black;
+    border-radius: 50px;
+}
+
+
+/* imma take a break */

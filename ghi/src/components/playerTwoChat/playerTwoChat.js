@@ -3,10 +3,10 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useSelector } from 'react-redux';
 import './chat.css'
 
-const Chat = ({ room }) => {
+const PlayerTwoChat = ({ room }) => {
     const [messages, setMessages] = useState([]);
     const [value, setValue] = useState('');
-    const player = 1
+    const player = 2
     const client = useRef(null);
     const user = useSelector(state => state.user.value);
 
@@ -81,4 +81,4 @@ const Chat = ({ room }) => {
     );
 };
 
-export default Chat;
+export default PlayerTwoChat;

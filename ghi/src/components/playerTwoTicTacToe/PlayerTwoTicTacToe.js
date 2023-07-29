@@ -4,14 +4,14 @@ import { useCreateGameRecordMutation } from '../../store/Api';
 import './TicTacToe.css'
 
 
-const TicTacToe = ({ match, gameURL, game, user }) => {
+const PlayerTwoTicTacToe = ({ match, gameURL, game, user }) => {
     const [gameState, setGameState] = useState({ "state": "nnnnnnnnn0" });
     const [playerCount, setPlayerCount] = useState(1)
-    const playerID = 0
+    const playerID = 1
     const client = useRef(null);
     const [linkCopied, setLinkCopied] = useState(false);
-    const [win, setWin] = useState(false)
     const [draw, setDraw] = useState(false)
+    const [win, setWin] = useState(false)
     const [createGameRecord] = useCreateGameRecordMutation()
     const [recordCreated, setRecordCreated] = useState(false);
 
@@ -29,8 +29,8 @@ const TicTacToe = ({ match, gameURL, game, user }) => {
                         state: dataFromServer.state,
                     });
                     setPlayerCount(dataFromServer.count_of_connected_users)
-                    setWin(dataFromServer.state[10] === "W")
                     setDraw(dataFromServer.state[10] === "D")
+                    setWin(dataFromServer.state[10] === "W")
                 }
             };
             // Clean up the connection when the component is unmounted
@@ -50,8 +50,6 @@ const TicTacToe = ({ match, gameURL, game, user }) => {
             setRecordCreated(true);
         }
     })
-
-
 
 
     const onButtonClicked = (index) => {
@@ -143,4 +141,4 @@ const TicTacToe = ({ match, gameURL, game, user }) => {
     );
 };
 
-export default TicTacToe;
+export default PlayerTwoTicTacToe;

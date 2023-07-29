@@ -4,6 +4,7 @@ import LoginForm from './components/loginForm/LoginForm';
 import MainPage from './components/mainPage/MainPage';
 import NavBar from './components/nav/NavBar'
 import PlayGamePage from './components/playGamePage/PlayGamePage';
+import PlayerTwoPlayGamePage from './components/playerTwoPlayGamePage/playerTwoPlayGamePage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from './store/userSlice';
 import jwt_decode from 'jwt-decode'
@@ -55,7 +56,7 @@ function ProtectedRoutes() {
         <Route path="/login" element={<LoginForm />} />
         <Route path='/' element={<MainPage />} />
         <Route path='/play/:gameName/' element={<PlayGamePage />} />
-        <Route path='/play/:gameName/:id/' element={<PlayGamePage />} />
+        <Route path='/play/:gameName/:id/' element={<PlayerTwoPlayGamePage />} />
       </Routes>
     </>
   );

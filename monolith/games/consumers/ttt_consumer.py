@@ -86,8 +86,14 @@ class TTTMatchConsumer(WebsocketConsumer):
             idx = text_data_json['index']
             state[idx] = letter
             winner = self.check_for_winner(state)
+            draw = "n" not in state[0:8] and winner == False
             if winner:
                 state.append("W")
+                new_state = "".join(state)
+                TicTacToeMatch.objects.filter(id=self.match_id).update(state=new_state)
+                update_match = TicTacToeMatch.objects.get(id=self.match_id)
+            elif draw:
+                state.append("D")
                 new_state = "".join(state)
                 TicTacToeMatch.objects.filter(id=self.match_id).update(state=new_state)
                 update_match = TicTacToeMatch.objects.get(id=self.match_id)
