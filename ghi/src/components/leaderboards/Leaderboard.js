@@ -8,7 +8,7 @@ function Leaderboard({ id }) {
     return (
         <div id="leaderboard">
             <div>
-                <h1>Leaderboard</h1>
+                <h1 id="title">Leaderboard</h1>
             </div>
             <div>
                 {game ?

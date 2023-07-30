@@ -1,5 +1,4 @@
 #game-detail-modal {
-  width: 100%;
   max-width: 1000px;
   margin-right: auto;
   margin-left: auto;
@@ -8,7 +7,7 @@
 }
 
 .game-detail-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -18,25 +17,23 @@
 }
 
 .game-detail-content {
-  /* position: absolute; */
-  top: 40px;
-  left: 40px;
-  right: 40px;
-  bottom: 40px;
   background: #373952;
   outline: none;
   border-radius: 50px;
   border: 20px solid #1a1b28;
+  height: min-content;
 }
 
-.container {
+.modal-container {
   display: flex;
   flex-direction: column;
+  height: auto;
   width: 100%;
+  background-color: #1a1b28;
+  flex-grow: 1;
 }
 
 .row {
-  background-color: #1a1b28;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -56,9 +53,14 @@
 }
 
 .cell {
-  padding: 10px;
+  padding: 1%;
   margin: 5px;
   flex-grow: 1;
+}
+
+#game-detail-title {
+  margin-left: 11px;
+  color: rgb(118, 122, 142);
 }
 
 #game-area {
@@ -67,11 +69,19 @@
 
 #big-game-img {
   width: 100%;
-  border-radius: 50px;
+  border-radius: 10%;
 }
 
 #game-pictures {
-  height: 150px;
+  height: 100%;
+  max-height: 175px;
+}
+
+.game-picture {
+  max-width: 100%;
+  height: auto;
+  max-height: 175px;
+  border-radius: 10%;
 }
 
 #play-options {
@@ -81,6 +91,10 @@
 #description {
   height: auto;
   color: rgb(118, 122, 142);
+}
+
+#leaderboard {
+  width: 100%;
 }
 
 #play-against-friend {
@@ -93,6 +107,7 @@
   align-items: center;
   font-weight: 800;
   font-size: 16px;
+  text-decoration: none;
   box-sizing: border-box;
   padding: 8px 16px;
   background: rgb(55, 57, 82);

@@ -21,13 +21,13 @@ function MainPage() {
     return (
         <>
             <div style={{ "margin": "20px" }}>
-                <div className="container">
+                <div id="main-page-container">
                     <Carousel />
                     <div className="games-grid">
                         {
                             isLoading ? <div>Loading...</div> : games.map(game => (
                                 <div key={game.id} className="game-square">
-                                    <img onClick={activateGameDetailModal(game.name)} className='game-square-img' src={require(`../../${game.gif}`)} />
+                                    <img onClick={activateGameDetailModal(game.name)} className='game-square-img' src={require(`../../${game.picture_1}`)} />
                                 </div>
                             ))
                         }

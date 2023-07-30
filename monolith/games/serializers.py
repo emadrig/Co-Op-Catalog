@@ -15,7 +15,10 @@ class GameDetailSerializer(serializers.HyperlinkedModelSerializer):
             'description',
             'rules',
             'id',
-            'gif'
+            'picture_1',
+            'picture_2',
+            'picture_3',
+            'picture_4',
         ]
 
 class GameListSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,7 +27,7 @@ class GameListSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'name',
             'id',
-            'gif'
+            'picture_1'
         ]
 
 class PlayerHighScoreSerializer(serializers.HyperlinkedModelSerializer):

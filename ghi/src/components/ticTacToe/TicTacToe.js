@@ -49,7 +49,7 @@ const TicTacToe = ({ match, gameURL, game, user }) => {
             });
             setRecordCreated(true);
         }
-    })
+    }, [win])
 
 
 

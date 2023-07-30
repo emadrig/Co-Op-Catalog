@@ -23,17 +23,23 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                 >
                     {isLoading ? <div>Loading...</div> : (
                         <>
-                            <h1>{game.name}</h1>
-                            <div className="container">
+                            <div className="modal-container">
+                                <h1 id='game-detail-title'>{game.name}</h1>
                                 <div className="row">
                                     <div className="column" id="left-column">
                                         <div className="cell" id="game-area">
-                                            <img src={require(`../../${game.gif}`)} id="big-game-img" />
+                                            <img src={require(`../../${game.picture_1}`)} id="big-game-img" alt="" />
                                         </div>
                                         <div className="row" id="game-pictures">
-                                            <div className="cell">Picture of game</div>
-                                            <div className="cell">Picture of game</div>
-                                            <div className="cell">Picture of game</div>
+                                            <div className="cell" >
+                                                <img src={require(`../../${game.picture_2}`)} alt="" className="game-picture" />
+                                            </div>
+                                            <div className="cell" >
+                                                <img src={require(`../../${game.picture_3}`)} alt="" className="game-picture" />
+                                            </div>
+                                            <div className="cell" >
+                                                <img src={require(`../../${game.picture_1}`)} alt="" className="game-picture" />
+                                            </div>
                                         </div>
                                         <div className="row" id="play-options">
                                             <Link to={`/play/${game.name}`} className="cell" id="play-against-friend">Play against Friend</Link>
@@ -42,8 +48,10 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                                         <div className="cell" id="description">{game.description}</div>
                                     </div>
                                     <div className="column" id="right-column">
-                                        <div className="cell">
-                                            <Leaderboard id={game.id} />
+                                        <div className="row">
+                                            <div className="cell" id="leaderboard">
+                                                <Leaderboard id={game.id} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

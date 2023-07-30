@@ -52,7 +52,10 @@ class Game(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     rules = models.TextField()
-    gif = models.CharField(max_length=100)
+    picture_1 = models.CharField(max_length=100, default='')
+    picture_2 = models.CharField(max_length=100, default='')
+    picture_3 = models.CharField(max_length=100, default='')
+    picture_4 = models.CharField(max_length=100, default='')
     multiplayer = models.BooleanField(default=False)
 
     def __str__(self):

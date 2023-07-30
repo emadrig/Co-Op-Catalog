@@ -26,7 +26,7 @@ function Carousel() {
                 return <h1 className='carousel-item'
                     style={{ transform: `translate(-${currentIndex * 100}%)` }}
                     key={index}>
-                        <img src={require(`../../${game.gif}`)} alt={`Slide ${index}`} />
+                        <img src={require(`../../${game.picture_1}`)} alt={`Slide ${index}`} />
                     </h1>
             })
             }
