@@ -45,27 +45,19 @@ const Chat = ({ room }) => {
         setValue("");
     };
 
+
     return (
         <>
             <h1>You are player: {player}</h1>
-            <div className='chat-component'>
+            <div id='chat-component'>
                 <div>
                     <div id='message-area'>
-                        Room Name: {room}
-                        <table>
-                            <tbody>
-                                {messages.map((message, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            {message.player}:
-                                        </td>
-                                        <td>
-                                            {message.msg}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        Chat with your friend here:
+                        {messages.map((message, index) => (
+                            <div key={index} className='message'>
+                                <p>{`${message.player}: ${message.msg}`}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import { useLogOutMutation } from "../../store/Api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { setToken } from "../../store/tokenSlice";
+import './LogOutButton.css'
 
 function LogOutButton() {
     const dispatch = useDispatch()
@@ -14,9 +15,9 @@ function LogOutButton() {
     };
 
     return (
-        <button onClick={handleLogout}>
+        <div onClick={handleLogout} id="log-out-button">
             Logout
-        </button>
+        </div>
     );
 }
 
