@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useGetGameDetailsQuery } from "../../store/Api";
 import { useState, useEffect } from "react";
-import './PlayGamePage.css'
 import Chat from "../chat/chat";
 import TicTacToe from "../ticTacToe/TicTacToe";
 import Battleship from "../battleship/Battleship";
 import jwt_decode from "jwt-decode"
 import { useSelector } from 'react-redux';
+import './PlayGamePage.css'
 
 
 function PlayGamePage() {
@@ -49,11 +49,10 @@ function PlayGamePage() {
             <>
                 <div className="play-games-page">
                     <h1>{game.name}</h1>
+                    <h4>{game.description}</h4>
                     <div id="play-game-area">
                         <GameComponent match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
                     </div>
-                    <div>{game.description}</div>
-                    <div>{game.rules}</div>
                     <Chat room={props.match} />
                 </div>
             </>

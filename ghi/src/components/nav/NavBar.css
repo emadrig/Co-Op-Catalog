@@ -14,10 +14,11 @@ nav ul {
 
 nav ul li a {
     border: none;
-    background-color: #5a6268;
-    color: #ddd;
+    background-color: #767a8e;
+    color: #1f2030;
     padding: 10px 20px;
     border-radius: 10px;
     cursor: pointer;
     text-decoration: none;
+    font-weight: bold;
 }

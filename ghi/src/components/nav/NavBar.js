@@ -25,9 +25,6 @@ function Navbar() {
                             <Link to="/">Home</Link>
                         </li>
                         <li>
-                            <Link to="/leaderboards">Leaderboards</Link>
-                        </li>
-                        <li>
                             <Link onClick={handleLogout} to='/login'>Logout</Link>
                         </li>
                     </>

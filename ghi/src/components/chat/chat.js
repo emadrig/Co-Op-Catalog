@@ -9,6 +9,8 @@ const Chat = ({ room }) => {
     const player = 1
     const client = useRef(null);
     const user = useSelector(state => state.user.value);
+    const messagesEndRef = useRef(null);
+
 
     useEffect(() => {
         client.current = new W3CWebSocket('ws://127.0.0.1:8000/ws/' + room + '/');
@@ -32,6 +34,12 @@ const Chat = ({ room }) => {
         };
     }, [room]);
 
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+
     const onButtonClicked = (e) => {
         e.preventDefault();
         console.log(e.value);
@@ -45,23 +53,21 @@ const Chat = ({ room }) => {
         setValue("");
     };
 
-
     return (
         <>
-            <h1>You are player: {player}</h1>
             <div id='chat-component'>
                 <div>
                     <div id='message-area'>
-                        Chat with your friend here:
                         {messages.map((message, index) => (
-                            <div key={index} className='message'>
+                            <div key={index} className={`message ${message.player === user.first_name ? 'current-user' : ''}`}>
                                 <p>{`${message.player}: ${message.msg}`}</p>
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                 </div>
             </div>
-            <form onSubmit={onButtonClicked} id='form'>
+            <form onSubmit={onButtonClicked} id='player-one-form'>
                 <input
                     type="text"
                     value={value}

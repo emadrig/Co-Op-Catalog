@@ -54,13 +54,13 @@
 
 .cell {
   padding: 1%;
-  margin: 5px;
+  margin: 1%;
   flex-grow: 1;
 }
 
 #game-detail-title {
-  margin-left: 11px;
-  color: rgb(118, 122, 142);
+  margin-left: 10px;
+  color: #767a8e;
 }
 
 #game-area {
@@ -84,9 +84,6 @@
   border-radius: 10px;
 }
 
-#play-options {
-  height: 75px;
-}
 
 #description {
   height: auto;
@@ -97,37 +94,36 @@
   width: 100%;
 }
 
+#play-options {
+  height: 75px;
+  padding: 1%;
+}
+
 #play-against-friend {
   border-radius: 10px;
-  transition: all 250ms ease 0s;
-  border: none;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 800;
-  font-size: 16px;
+  font-weight: bold;
   text-decoration: none;
   box-sizing: border-box;
   padding: 8px 16px;
   background: rgb(55, 57, 82);
-  color: rgb(249, 250, 255);
+  color: #f9faff;
   height: 60px;
 }
 
 #play-against-computer {
   border-radius: 10px;
-  transition: all 250ms ease 0s;
-  border: none;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 800;
-  font-size: 16px;
+  font-weight: bold;
   box-sizing: border-box;
   padding: 8px 16px;
   background: #373952;
-  color: white;
+  color: #f9faff;
   height: 60px;
 }
