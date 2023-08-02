@@ -18,22 +18,22 @@ function Navbar() {
 
     return (
         <nav>
-            <ul>
-                {token ? (
-                    <>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link onClick={handleLogout} to='/login'>Logout</Link>
-                        </li>
-                    </>
-                ) : (
+            {token ? (
+                <ul>
+                    <li>
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li>
+                        <Link onClick={handleLogout} to='/login'>Logout</Link>
+                    </li>
+                </ul>
+            ) : (
+                <ul>
                     <li>
                         <Link to='/login'>Log in</Link>
                     </li>
-                )}
-            </ul>
+                </ul>
+            )}
         </nav>
     )
 }
