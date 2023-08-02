@@ -1,4 +1,3 @@
-import { useLogOutMutation } from "../../store/Api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { setToken } from "../../store/tokenSlice";

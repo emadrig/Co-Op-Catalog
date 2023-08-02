@@ -1,18 +1,23 @@
 nav {
-    background-color: #1F2030;
-    padding: 10px;
+  background-color: #1f2030;
+  padding: 10px;
 }
 
 nav ul {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1000px;
-    list-style: none;
-    display: flex;
-    justify-content: space-around;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1000px;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
 }
 
 nav ul li a {
-    color: white;
+    border: none;
+    background-color: #5a6268;
+    color: #ddd;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
     text-decoration: none;
 }

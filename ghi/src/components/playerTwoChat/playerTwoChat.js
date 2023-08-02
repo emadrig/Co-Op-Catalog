@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useSelector } from 'react-redux';
-import './chat.css'
+import './playerTwoChat.css'
 
 const PlayerTwoChat = ({ room }) => {
     const [messages, setMessages] = useState([]);
@@ -34,7 +34,6 @@ const PlayerTwoChat = ({ room }) => {
 
     const onButtonClicked = (e) => {
         e.preventDefault();
-        console.log(e.value);
         client.current.send(
             JSON.stringify({
                 type: "message",
@@ -48,24 +47,15 @@ const PlayerTwoChat = ({ room }) => {
     return (
         <>
             <h1>You are player: {player}</h1>
-            <div className='chat-component'>
+            <div id='chat-component'>
                 <div>
                     <div id='message-area'>
-                        Room Name: {room}
-                        <table>
-                            <tbody>
-                                {messages.map((message, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            {message.player}:
-                                        </td>
-                                        <td>
-                                            {message.msg}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        Chat with your friend here:
+                        {messages.map((message, index) => (
+                            <div key={index} className='message'>
+                                <p>{`${message.player}: ${message.msg}`}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

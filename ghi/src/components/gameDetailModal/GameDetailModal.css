@@ -3,7 +3,7 @@
   margin-right: auto;
   margin-left: auto;
   margin-top: 10vh;
-  border-radius: 50px;
+  border-radius: 10px;
 }
 
 .game-detail-overlay {
@@ -19,7 +19,7 @@
 .game-detail-content {
   background: #373952;
   outline: none;
-  border-radius: 50px;
+  border-radius: 10px;
   border: 20px solid #1a1b28;
   height: min-content;
 }
@@ -69,7 +69,7 @@
 
 #big-game-img {
   width: 100%;
-  border-radius: 10%;
+  border-radius: 10px;
 }
 
 #game-pictures {
@@ -81,7 +81,7 @@
   max-width: 100%;
   height: auto;
   max-height: 175px;
-  border-radius: 10%;
+  border-radius: 10px;
 }
 
 #play-options {
@@ -98,7 +98,7 @@
 }
 
 #play-against-friend {
-  border-radius: 30px;
+  border-radius: 10px;
   transition: all 250ms ease 0s;
   border: none;
   cursor: pointer;
@@ -116,7 +116,7 @@
 }
 
 #play-against-computer {
-  border-radius: 30px;
+  border-radius: 10px;
   transition: all 250ms ease 0s;
   border: none;
   cursor: pointer;
