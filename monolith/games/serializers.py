@@ -19,6 +19,7 @@ class GameDetailSerializer(serializers.HyperlinkedModelSerializer):
             'picture_2',
             'picture_3',
             'picture_4',
+            'multiplayer'
         ]
 
 class GameListSerializer(serializers.HyperlinkedModelSerializer):

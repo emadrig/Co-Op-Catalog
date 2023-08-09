@@ -4,9 +4,12 @@ import { useState, useEffect } from "react";
 import Chat from "../chat/chat";
 import TicTacToe from "../ticTacToe/TicTacToe";
 import Battleship from "../battleship/Battleship";
+import RoadCrossing from "../roadCrossing/RoadCrossing";
 import jwt_decode from "jwt-decode"
 import { useSelector } from 'react-redux';
 import './PlayGamePage.css'
+import { Canvas } from '@react-three/fiber'
+
 
 
 function PlayGamePage() {
@@ -20,27 +23,30 @@ function PlayGamePage() {
     const componentMap = {
         'TicTacToe': TicTacToe,
         'Battleship': Battleship,
+        'RoadCrossing': RoadCrossing,
     };
     const GameComponent = componentMap[gameName];
 
     useEffect(() => {
-        fetch(`http://localhost:8000/${gameName}-match/`, { method: "POST" })
-            .then(res => res.json())
-            .then(data => {
-                const newMatch = data['id'];
-                const newGameURL = `http://localhost:3000/play/${gameName}/${data['id']}`;
-                setMatch(newMatch);
-                setGameURL(newGameURL);
-                setProps({
-                    "match": newMatch,
-                    "gameURL": newGameURL,
-                    "setMatch": setMatch
+        if (game && game.multiplayer) {
+            fetch(`http://localhost:8000/${gameName}-match/`, { method: "POST" })
+                .then(res => res.json())
+                .then(data => {
+                    const newMatch = data['id'];
+                    const newGameURL = `http://localhost:3000/play/${gameName}/${data['id']}`;
+                    setMatch(newMatch);
+                    setGameURL(newGameURL);
+                    setProps({
+                        "match": newMatch,
+                        "gameURL": newGameURL,
+                        "setMatch": setMatch
+                    })
                 })
-            })
+        }
     }, [])
 
 
-    if (isLoading || props.match === undefined) {
+    if (isLoading || game.multiplayer === true && props.match === undefined) {
         return (
             <div>Loading...</div>
         )
@@ -51,7 +57,13 @@ function PlayGamePage() {
                     <h1>{game.name}</h1>
                     <h4>{game.description}</h4>
                     <div id="play-game-area">
-                        <GameComponent match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
+                        {game.multiplayer ?
+                            <GameComponent match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
+                            :
+                            <Canvas>
+                                <GameComponent match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
+                            </Canvas>
+                        }
                     </div>
                     <Chat room={props.match} />
                 </div>
