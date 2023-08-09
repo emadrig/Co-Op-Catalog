@@ -19,8 +19,6 @@ class BattleshipMatchConsumer(WebsocketConsumer):
 
         self.match = BattleshipMatch.objects.get(id=self.match_id)
 
-        print('match: ', self.match.player_one_count)
-
         # get current count of connected users or default to 0 if it doesn't exist
         count_of_connected_users = cache.get(self.match_id, 0)
         # increment the count of connected users
@@ -41,7 +39,7 @@ class BattleshipMatchConsumer(WebsocketConsumer):
 
 
     def disconnect(self, close_code):
-    # Leave match group
+        # Leave match group
         async_to_sync(self.channel_layer.group_discard)(
             self.match_group_id,
             self.channel_name
@@ -50,6 +48,16 @@ class BattleshipMatchConsumer(WebsocketConsumer):
         # decrease the count of connected users
         count_of_connected_users = cache.get(self.match_id, 0) - 1
         cache.set(self.match_id, count_of_connected_users)
+
+        if count_of_connected_users == 0:
+            BattleshipMatch.objects.filter(id=self.match_id).delete()
+            self.match.player_one_board = None
+            self.match.player_one_count = None
+            self.match.player_two_board = None
+            self.match.player_two_count = None
+            self.match.current_player = None
+            self.match.winner = None
+            count_of_connected_users = None
 
         # Send message to match group
         async_to_sync(self.channel_layer.group_send)(
@@ -70,9 +78,7 @@ class BattleshipMatchConsumer(WebsocketConsumer):
     def receive(self, text_data):
         print("this is text_data: ", text_data)
         text_data_json = json.loads(text_data)
-
         self.match = BattleshipMatch.objects.get(id=self.match_id)
-
         player_one_board = list(self.match.player_one_board)
         player_two_board = list(self.match.player_two_board)
         player_one_count = self.match.player_one_count
@@ -101,11 +107,13 @@ class BattleshipMatchConsumer(WebsocketConsumer):
                 'sunk': 0
             }
             winner = False
-            BattleshipMatch.objects.filter(id=self.match_id).update(player_one_board=player_one_board,
-                                                                    player_one_count=player_one_count,
-                                                                    player_two_board=player_two_board,
-                                                                    player_two_count=player_two_count,
-                                                                    winner=winner)
+            BattleshipMatch.objects.filter(id=self.match_id).update(
+                player_one_board=player_one_board,
+                player_one_count=player_one_count,
+                player_two_board=player_two_board,
+                player_two_count=player_two_count,
+                winner=winner,
+            )
 
 
         if text_data_json['type'] == 'move':

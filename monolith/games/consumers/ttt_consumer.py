@@ -58,12 +58,18 @@ class TTTMatchConsumer(WebsocketConsumer):
         count_of_connected_users = cache.get(self.match_id, 0) - 1
         cache.set(self.match_id, count_of_connected_users)
 
+        if count_of_connected_users == 0:
+            TicTacToeMatch.objects.filter(id=self.match_id).delete()
+            state = None
+        else:
+            state = TicTacToeMatch.objects.get(id=self.match_id).state
+
         # Send message to match group
         async_to_sync(self.channel_layer.group_send)(
             self.match_group_id,
             {
                 'type': 'chat_message',
-                'state': TicTacToeMatch.objects.get(id=self.match_id).state,
+                'state': state,
                 'count_of_connected_users': count_of_connected_users
             }
         )
