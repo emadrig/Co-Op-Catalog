@@ -56,16 +56,20 @@ function PlayGamePage() {
                 <div className="play-games-page">
                     <h1>{game.name}</h1>
                     <h4>{game.description}</h4>
-                    <div id="play-game-area">
-                        {game.multiplayer ?
-                            <GameComponent match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
-                            :
+                    {game.multiplayer ?
+                        <>
+                            <div id="play-game-area">
+                                <GameComponent match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
+                            </div>
+                            <Chat room={props.match} />
+                        </>
+                        :
+                        <>
                             <Canvas>
                                 <GameComponent match={props.match} gameURL={props.gameURL} game={game['id']} user={user} />
                             </Canvas>
-                        }
-                    </div>
-                    <Chat room={props.match} />
+                        </>
+                    }
                 </div>
             </>
         )
