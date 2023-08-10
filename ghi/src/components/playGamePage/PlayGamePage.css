@@ -25,8 +25,3 @@ Canvas {
     background: gray;
     border-radius: 10px;
 }
-
-.leaderboard-button {
-    justify-content: right;
-
-}

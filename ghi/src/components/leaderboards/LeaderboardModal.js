@@ -1,6 +1,6 @@
 import { useGetLeaderBoardByGameQuery } from "../../store/Api";
 import Modal from "react-modal";
-// import './LeaderboardModal.css'
+
 
 Modal.setAppElement('#root');
 
@@ -15,8 +15,6 @@ function LeaderboardModal({ setModalIsOpen, modalIsOpen, id }) {
                     isOpen={modalIsOpen}
                     onRequestClose={() => setModalIsOpen(false)}
                     id="leaderboard-modal"
-                    className="leaderboard-content"
-                    overlayClassName="leaderboard-overlay"
                 >
             <div className="modal-container">
 

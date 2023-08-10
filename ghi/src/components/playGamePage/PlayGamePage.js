@@ -63,7 +63,7 @@ function PlayGamePage() {
         return (
             <>
                 <div className="play-games-page">
-                <button className="leaderboard-button" onClick={activateGameDetailModal()} >X</button>
+                <button style={{float:'right'}} onClick={activateGameDetailModal()} >X</button>
                     <h1>{game.name}</h1>
                     <h4>{game.description}</h4>
                     {game.multiplayer ?
