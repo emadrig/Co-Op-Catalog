@@ -42,8 +42,14 @@ function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
                                             </div>
                                         </div>
                                         <div className="row" id="play-options">
+                                        {game.multiplayer ?
+                                            <>
                                             <Link to={`/play/${game.name}`} className="cell" id="play-against-friend">Play against Friend</Link>
                                             <div className="cell" id="play-against-computer">Play against Computer</div>
+                                            </>
+                                            :
+                                            <Link to={`/play/${game.name}`} className="cell" id="play-against-friend">Play!</Link>
+                                        }
                                         </div>
                                         <div className="cell" id="description">{game.description}</div>
                                     </div>
