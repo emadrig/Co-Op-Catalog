@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useGetGameDetailsQuery } from "../../store/Api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Chat from "../chat/chat";
 import TicTacToe from "../ticTacToe/TicTacToe";
 import Battleship from "../battleship/Battleship";
 import RoadCrossing from "../roadCrossing/RoadCrossing";
+import LeaderboardModal from "../leaderboards/LeaderboardModal";
 import jwt_decode from "jwt-decode"
 import { useSelector } from 'react-redux';
 import './PlayGamePage.css'
@@ -15,6 +16,7 @@ import { Canvas } from '@react-three/fiber'
 function PlayGamePage() {
     const { gameName } = useParams()
     const { data: game, isLoading } = useGetGameDetailsQuery(gameName)
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const [gameURL, setGameURL] = useState()
     const [match, setMatch] = useState(null)
     const [props, setProps] = useState({ "id": undefined })
@@ -26,6 +28,13 @@ function PlayGamePage() {
         'RoadCrossing': RoadCrossing,
     };
     const GameComponent = componentMap[gameName];
+
+    const activateGameDetailModal = useCallback(
+        () => () => {
+            setModalIsOpen(true)
+        },
+        []
+    )
 
     useEffect(() => {
         if (game && game.multiplayer) {
@@ -54,6 +63,7 @@ function PlayGamePage() {
         return (
             <>
                 <div className="play-games-page">
+                <button className="leaderboard-button" onClick={activateGameDetailModal()} >X</button>
                     <h1>{game.name}</h1>
                     <h4>{game.description}</h4>
                     {game.multiplayer ?
@@ -71,6 +81,7 @@ function PlayGamePage() {
                         </>
                     }
                 </div>
+                <LeaderboardModal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} id={game['id']} />
             </>
         )
     }

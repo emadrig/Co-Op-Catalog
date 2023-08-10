@@ -1,14 +1,27 @@
 import { useGetLeaderBoardByGameQuery } from "../../store/Api";
-import './Leaderboard.css'
+import Modal from "react-modal";
+// import './LeaderboardModal.css'
 
+Modal.setAppElement('#root');
 
-function Leaderboard({ id }) {
+function LeaderboardModal({ setModalIsOpen, modalIsOpen, id }) {
     const { data: game } = useGetLeaderBoardByGameQuery(id)
 
+    console.log(game)
+
     return (
-        <div id="leaderboard">
+        <div>
+        <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={() => setModalIsOpen(false)}
+                    id="leaderboard-modal"
+                    className="leaderboard-content"
+                    overlayClassName="leaderboard-overlay"
+                >
+            <div className="modal-container">
+
             <div>
-                <h1 id="title">Leaderboard</h1>
+                <h1 id="title"> {game?.high_scores[0].game.name} Leaderboard</h1>
             </div>
             <div>
                 {game ?
@@ -33,8 +46,10 @@ function Leaderboard({ id }) {
                     :
                     <div>Loading</div>}
             </div>
+            </div>
+            </Modal>
         </div>
     )
 }
 
-export default Leaderboard;
+export default LeaderboardModal;
