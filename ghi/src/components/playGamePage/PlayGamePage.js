@@ -6,6 +6,7 @@ import TicTacToe from "../ticTacToe/TicTacToe";
 import Battleship from "../battleship/Battleship";
 import RoadCrossing from "../roadCrossing/RoadCrossing";
 import LeaderboardModal from "../leaderboards/LeaderboardModal";
+import GameDetailModal from "../gameDetailModal/GameDetailModal";
 import jwt_decode from "jwt-decode"
 import { useSelector } from 'react-redux';
 import './PlayGamePage.css'
@@ -81,7 +82,8 @@ function PlayGamePage() {
                         </>
                     }
                 </div>
-                <LeaderboardModal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} id={game['id']} />
+                {/* <LeaderboardModal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} id={game['id']} /> */}
+                <GameDetailModal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} name={gameName} />
             </>
         )
     }

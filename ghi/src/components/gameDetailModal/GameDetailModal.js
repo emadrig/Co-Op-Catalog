@@ -10,6 +10,7 @@ Modal.setAppElement('#root');
 
 function GameDetailModal({ setModalIsOpen, modalIsOpen, name }) {
     const { data: game, isLoading } = useGetGameDetailsQuery(name)
+    console.log(game)
 
     return (
         <>
