@@ -8,22 +8,22 @@ import { Truck } from '../models/truck'
 function RoadCrossing() {
     const [position, setPosition] = useState([0, 1, 0]);
     const [lanes, setLanes] = useState([
-        { id: 1, position: [0, 0, 8] },
-        { id: 2, position: [0, 0, 6] },
-        { id: 3, position: [0, 0, 4] },
-        { id: 4, position: [0, 0, 2] },
-        { id: 5, position: [0, 0, 0] },
-        { id: 6, position: [0, 0, -2] },
-        { id: 7, position: [0, 0, -4] },
-        { id: 8, position: [0, 0, -6] },
-        { id: 9, position: [0, 0, -8] },
-        { id: 10, position: [0, 0, -10] },
-        { id: 11, position: [0, 0, -12] },
-        { id: 12, position: [0, 0, -14] },
-        { id: 13, position: [0, 0, -16] },
-        { id: 14, position: [0, 0, -18] },
-        { id: 15, position: [0, 0, -20] },
-        { id: 16, position: [0, 0, -22] },
+        { id: 1, position: [0, 0, 8], hasTrucks: (Math.random() < 0.66) },
+        { id: 2, position: [0, 0, 6], hasTrucks: (Math.random() < 0.66) },
+        { id: 3, position: [0, 0, 4], hasTrucks: (Math.random() < 0.66) },
+        { id: 4, position: [0, 0, 2], hasTrucks: (Math.random() < 0.66) },
+        { id: 5, position: [0, 0, 0], hasTrucks: (Math.random() < 0.66) },
+        { id: 6, position: [0, 0, -2], hasTrucks: (Math.random() < 0.66) },
+        { id: 7, position: [0, 0, -4], hasTrucks: (Math.random() < 0.66) },
+        { id: 8, position: [0, 0, -6], hasTrucks: (Math.random() < 0.66) },
+        { id: 9, position: [0, 0, -8], hasTrucks: (Math.random() < 0.66) },
+        { id: 10, position: [0, 0, -10], hasTrucks: (Math.random() < 0.66)  },
+        { id: 11, position: [0, 0, -12], hasTrucks: (Math.random() < 0.66)  },
+        { id: 12, position: [0, 0, -14], hasTrucks: (Math.random() < 0.66)  },
+        { id: 13, position: [0, 0, -16], hasTrucks: (Math.random() < 0.66)  },
+        { id: 14, position: [0, 0, -18], hasTrucks: (Math.random() < 0.66)  },
+        { id: 15, position: [0, 0, -20], hasTrucks: (Math.random() < 0.66)  },
+        { id: 16, position: [0, 0, -22], hasTrucks: (Math.random() < 0.66)  },
     ]);
     const models = useGLTF("/models/lane.gltf");
     const lane = models.scene.children[0];
@@ -37,7 +37,8 @@ function RoadCrossing() {
                     newPosition[2] -= 2;
                     setLanes((prevLanes) => {
                         const newLanes = prevLanes.slice(1);
-                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[prevLanes.length - 1].position[2] - 2] }; // Create a new lane
+                        const hasTrucks = Math.random() < 0.66
+                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[prevLanes.length - 1].position[2] - 2], hasTrucks }; // Create a new lane
                         newLanes.push(newLane);
                         return newLanes;
                     });
@@ -46,7 +47,8 @@ function RoadCrossing() {
                     newPosition[2] += 2;
                     setLanes((prevLanes) => {
                         const newLanes = prevLanes.slice(0, -1);
-                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[0].position[2] + 2] }; // Create a new lane
+                        const hasTrucks = Math.random() < 0.66
+                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[0].position[2] + 2], hasTrucks }; // Create a new lane
                         newLanes.unshift(newLane);
                         return newLanes;
                     });
@@ -90,7 +92,7 @@ function RoadCrossing() {
                 <meshStandardMaterial />
             </mesh>
             {lanes.map((laneItem) => (
-                <Lane key={laneItem.id} object={lane} position={laneItem.position} />
+                <Lane key={laneItem.id} object={lane} position={laneItem.position} hasTrucks={laneItem.hasTrucks} />
             ))}
             <Truck />
         </>
