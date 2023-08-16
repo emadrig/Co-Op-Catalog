@@ -3,13 +3,11 @@ import { Truck } from './truck';
 import { useGLTF } from '@react-three/drei';
 
 export function Lane(props) {
-    const { hasTrucks = true } = props;
-    const { nodes, materials } = useGLTF('/models/lane.gltf');
-    const getRandomStartPosition = () => -25 - Math.random() * 12;
-    const [trucks, setTrucks] = useState(hasTrucks ? [{ id: 0, positionX: getRandomStartPosition(), spawned: false }] : []);
+  const { nodes, materials } = useGLTF('/models/lane.gltf');
+  const getRandomStartPosition = () => -15 - Math.random() * 15;
+  const [trucks, setTrucks] = useState([{ id: 0, positionX: getRandomStartPosition(), spawned: false }]);
 
   useEffect(() => {
-    if (!hasTrucks) return;
 
     const interval = setInterval(() => {
       setTrucks((prevTrucks) => {
@@ -18,7 +16,7 @@ export function Lane(props) {
           let newPositionX = truck.positionX + 0.05;
 
           // Check if a new truck should be spawned
-          if (newPositionX > -18 && newPositionX < -13 && !truck.spawned) {
+          if (newPositionX > -8 && newPositionX < -3 && !truck.spawned) {
             newTrucks.push({ id: newTrucks.length, positionX: getRandomStartPosition(), spawned: false });
             truck.spawned = true; // Mark the current truck as having spawned another
           }
@@ -30,10 +28,10 @@ export function Lane(props) {
         }
         return newTrucks;
       });
-    }, 20); // 20 ms interval corresponds to roughly 50 updates per second
+    }, 15); // 20 ms interval corresponds to roughly 50 updates per second
 
-    return () => clearInterval(interval); // Clean up the interval on unmount
-  }, [hasTrucks]);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <group {...props} dispose={null}>

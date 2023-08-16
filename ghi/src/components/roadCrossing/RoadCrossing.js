@@ -17,13 +17,13 @@ function RoadCrossing() {
         { id: 7, position: [0, 0, -4], hasTrucks: (Math.random() < 0.66) },
         { id: 8, position: [0, 0, -6], hasTrucks: (Math.random() < 0.66) },
         { id: 9, position: [0, 0, -8], hasTrucks: (Math.random() < 0.66) },
-        { id: 10, position: [0, 0, -10], hasTrucks: (Math.random() < 0.66)  },
-        { id: 11, position: [0, 0, -12], hasTrucks: (Math.random() < 0.66)  },
-        { id: 12, position: [0, 0, -14], hasTrucks: (Math.random() < 0.66)  },
-        { id: 13, position: [0, 0, -16], hasTrucks: (Math.random() < 0.66)  },
-        { id: 14, position: [0, 0, -18], hasTrucks: (Math.random() < 0.66)  },
-        { id: 15, position: [0, 0, -20], hasTrucks: (Math.random() < 0.66)  },
-        { id: 16, position: [0, 0, -22], hasTrucks: (Math.random() < 0.66)  },
+        { id: 10, position: [0, 0, -10], hasTrucks: (Math.random() < 0.66) },
+        { id: 11, position: [0, 0, -12], hasTrucks: (Math.random() < 0.66) },
+        { id: 12, position: [0, 0, -14], hasTrucks: (Math.random() < 0.66) },
+        { id: 13, position: [0, 0, -16], hasTrucks: (Math.random() < 0.66) },
+        { id: 14, position: [0, 0, -18], hasTrucks: (Math.random() < 0.66) },
+        { id: 15, position: [0, 0, -20], hasTrucks: (Math.random() < 0.66) },
+        { id: 16, position: [0, 0, -22], hasTrucks: (Math.random() < 0.66) }
     ]);
     const models = useGLTF("/models/lane.gltf");
     const lane = models.scene.children[0];
@@ -38,7 +38,7 @@ function RoadCrossing() {
                     setLanes((prevLanes) => {
                         const newLanes = prevLanes.slice(1);
                         const hasTrucks = Math.random() < 0.66
-                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[prevLanes.length - 1].position[2] - 2], hasTrucks }; // Create a new lane
+                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[prevLanes.length - 1].position[2] - 2], hasTrucks };
                         newLanes.push(newLane);
                         return newLanes;
                     });
@@ -48,7 +48,7 @@ function RoadCrossing() {
                     setLanes((prevLanes) => {
                         const newLanes = prevLanes.slice(0, -1);
                         const hasTrucks = Math.random() < 0.66
-                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[0].position[2] + 2], hasTrucks }; // Create a new lane
+                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[0].position[2] + 2], hasTrucks }
                         newLanes.unshift(newLane);
                         return newLanes;
                     });
@@ -65,9 +65,9 @@ function RoadCrossing() {
 
             setPosition(newPosition);
             camera.position.set(
-                newPosition[0] + 1,
-                newPosition[1] + 6,
-                newPosition[2] + 4
+                newPosition[0] + 0.5,
+                newPosition[1] + 5,
+                newPosition[2] + 3
             );
         };
 
@@ -88,7 +88,7 @@ function RoadCrossing() {
             <ambientLight intensity={1} />
             <directionalLight castShadow color="white" position={[0, 10, 0]} intensity={1} />
             <mesh castShadow position={position}>
-                <boxGeometry args={[2, 2, 2]} />
+                <boxGeometry args={[1, 2, 1]} />
                 <meshStandardMaterial />
             </mesh>
             {lanes.map((laneItem) => (
