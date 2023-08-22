@@ -27,6 +27,7 @@ function PlayGamePage() {
     };
     const GameComponent = componentMap[gameName];
 
+
     useEffect(() => {
         if (game && game.multiplayer) {
             fetch(`http://localhost:8000/${gameName}-match/`, { method: "POST" })
