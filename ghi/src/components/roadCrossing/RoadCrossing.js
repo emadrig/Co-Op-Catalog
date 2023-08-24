@@ -4,27 +4,29 @@ import { useGLTF } from '@react-three/drei'
 import { useThree, useFrame } from '@react-three/fiber'
 import { Lane } from '../models/lane'
 import { Truck } from '../models/truck'
+import { Sidewalk } from '../models/sidewalk'
 
 function RoadCrossing() {
     const [position, setPosition] = useState([0, 1, 0]);
     const [lanes, setLanes] = useState([
-        { id: 1, position: [0, 0, 8], hasTrucks: (Math.random() < 0.66) },
-        { id: 2, position: [0, 0, 6], hasTrucks: (Math.random() < 0.66) },
-        { id: 3, position: [0, 0, 4], hasTrucks: (Math.random() < 0.66) },
-        { id: 4, position: [0, 0, 2], hasTrucks: (Math.random() < 0.66) },
-        { id: 5, position: [0, 0, 0], hasTrucks: (Math.random() < 0.66) },
-        { id: 6, position: [0, 0, -2], hasTrucks: (Math.random() < 0.66) },
-        { id: 7, position: [0, 0, -4], hasTrucks: (Math.random() < 0.66) },
-        { id: 8, position: [0, 0, -6], hasTrucks: (Math.random() < 0.66) },
-        { id: 9, position: [0, 0, -8], hasTrucks: (Math.random() < 0.66) },
-        { id: 10, position: [0, 0, -10], hasTrucks: (Math.random() < 0.66) },
-        { id: 11, position: [0, 0, -12], hasTrucks: (Math.random() < 0.66) },
-        { id: 12, position: [0, 0, -14], hasTrucks: (Math.random() < 0.66) },
-        { id: 13, position: [0, 0, -16], hasTrucks: (Math.random() < 0.66) },
-        { id: 14, position: [0, 0, -18], hasTrucks: (Math.random() < 0.66) },
-        { id: 15, position: [0, 0, -20], hasTrucks: (Math.random() < 0.66) },
-        { id: 16, position: [0, 0, -22], hasTrucks: (Math.random() < 0.66) }
+        { id: 1, position: [0, 0, 8], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 2, position: [0, 0, 6], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 3, position: [0, 0, 4], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 4, position: [0, 0, 2], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 5, position: [0, 0, 0], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 6, position: [0, 0, -2], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 7, position: [0, 0, -4], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 8, position: [0, 0, -6], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 9, position: [0, 0, -8], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 10, position: [0, 0, -10], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 11, position: [0, 0, -12], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 12, position: [0, 0, -14], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 13, position: [0, 0, -16], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 14, position: [0, 0, -18], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 15, position: [0, 0, -20], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
+        { id: 16, position: [0, 0, -22], type: Math.random() < 1 / 3 ? "sidewalk" : "lane" },
     ]);
+
     const models = useGLTF("/models/lane.gltf");
     const lane = models.scene.children[0];
     const { camera } = useThree();
@@ -37,8 +39,11 @@ function RoadCrossing() {
                     newPosition[2] -= 2;
                     setLanes((prevLanes) => {
                         const newLanes = prevLanes.slice(1);
-                        const hasTrucks = Math.random() < 0.66
-                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[prevLanes.length - 1].position[2] - 2], hasTrucks };
+                        const newLane = {
+                            id: new Date().getTime(),
+                            position: [0, 0, prevLanes[prevLanes.length - 1].position[2] - 2],
+                            type: Math.random() < 1 / 3 ? "sidewalk" : "lane"
+                        };
                         newLanes.push(newLane);
                         return newLanes;
                     });
@@ -47,8 +52,11 @@ function RoadCrossing() {
                     newPosition[2] += 2;
                     setLanes((prevLanes) => {
                         const newLanes = prevLanes.slice(0, -1);
-                        const hasTrucks = Math.random() < 0.66
-                        const newLane = { id: new Date().getTime(), position: [0, 0, prevLanes[0].position[2] + 2], hasTrucks }
+                        const newLane = {
+                            id: new Date().getTime(),
+                            position: [0, 0, prevLanes[0].position[2] + 2],
+                            type: Math.random() < 1 / 3 ? "sidewalk" : "lane"
+                        }
                         newLanes.unshift(newLane);
                         return newLanes;
                     });
@@ -91,9 +99,13 @@ function RoadCrossing() {
                 <boxGeometry args={[1, 2, 1]} />
                 <meshStandardMaterial />
             </mesh>
-            {lanes.map((laneItem) => (
-                <Lane key={laneItem.id} object={lane} position={laneItem.position} hasTrucks={laneItem.hasTrucks} />
-            ))}
+            {lanes.map((item) =>
+                item.type === "lane" ? (
+                    <Lane key={item.id} object={lane} position={item.position} />
+                ) : (
+                    <Sidewalk key={item.id} position={item.position} />
+                )
+            )}
             <Truck />
         </>
     );
